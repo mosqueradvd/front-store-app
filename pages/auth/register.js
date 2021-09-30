@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter, Router } from "next/router";
 import axios from "axios";
 
 import { set_glob_token } from "../../utils/set_token";
@@ -40,6 +40,8 @@ export default function Register() {
 
   const signup = async (e) => {
     e.preventDefault();
+
+    console.log('sign up', sign_up)
 
     await axios
       .post("http://localhost:4000/auth/register", sign_up, {

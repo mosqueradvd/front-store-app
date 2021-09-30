@@ -1,22 +1,58 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 // components
 export default function CardCreateProduct() {
+  const router = useRouter();
+
   const [initProduct, setInitProduct] = useState({
     name: "",
     quantity: "",
     unit_cost: "",
     unit_price: "",
     expiration_date: "",
-  });
+  })
 
   const [image, setImage] = useState();
   const [imageInput, setImageInput] = useState(null);
+  const [inventory, setInventory] = useState([]);
+  const [suppliers, setSuppliers] = useState([]);
+  const [supp, setSupp] = useState([]);
+  const [id, setId] = useState(null);
+  const [category, setCategory] = useState({
+    category: ""
+  })
+
+  const handleSelectChange = (e) => {
+    let value = e.target.value
+    console.log('cat', value)
+
+    setId(value)
+
+    setCategory({
+      ...category,
+      [e.target.name]: value
+    })
+  }
+
+  const handleSupChange = (e) => {
+    let value = e.target.value
+    console.log('supp', value)
+    setSupp(value)
+
+    setSupp({
+      ...supp,
+      [e.target.name]: value
+    })
+  }
 
   useEffect(() => {
     const img = document.querySelector("#image");
     setImageInput(img);
+
+    get_inventory();
+    get_suppliers()
   }, []);
 
   const handleChange = (e) => {
@@ -25,6 +61,17 @@ export default function CardCreateProduct() {
       [e.target.name]: e.target.value,
     });
   };
+
+  const get_suppliers = async () => {
+    const resp = await fetch("http://localhost:4000/api/supplier/get-supplier", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("glob_token")}`
+      }
+    })
+    const data = await resp.json()
+    setSuppliers(data.suppliers)
+    console.log('supps', data)
+  }
 
   const imgToS3 = async (e) => {
     e.preventDefault();
@@ -36,6 +83,8 @@ export default function CardCreateProduct() {
       res.json()
     );
 
+    setImage(url.split("?")[0]);
+
     // post the image direclty to the s3 bucket
     await fetch(url, {
       method: "PUT",
@@ -43,35 +92,51 @@ export default function CardCreateProduct() {
         "Content-Type": "multipart/form-data",
       },
       body: file,
-    })
-      .then((response) => {
-        console.log('rspns', response)
-        create_product(image)
-      });
+    }).then(async () => {
+      console.log("set image", image);
+      await create_product(image);
+      router.push("/admin/products");
+    });
 
     // wait for aws response & get the img url
 
     const imageUrl = url.split("?")[0];
-    setImage(imageUrl)
     console.log("imageUrl", imageUrl);
 
     // post requst to my server to store any extra data
   };
 
-  const create_product = async (image) => {
-    const new_product = { ...initProduct, image };
-    console.log("newprod", new_product);
-    // await imgTos3();
+  const get_inventory = async () => {
+    const resp = await fetch(
+      "http://localhost:4000/api/inventory/get-inventory",
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("glob_token")}`,
+        },
+      }
+    );
+    const inven = await resp.json();
 
-    // await axios
-    //   .post("http://localhost:4000/products/create-products", new_product, {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       Authorization: `Bearer ${localStorage.getItem("glob_token")}`,
-    //     },
-    //   })
-    //   .then((data) => console.log("data", data))
-    //   .catch((e) => console.error(e));
+    setInventory(inven.category);
+    console.log("inven", inven.category);
+  };
+
+  const create_product = async (image) => {
+    const new_product = { id_category: id, ...initProduct, image };
+    console.log("newprod", new_product);
+    // await imgToS3();
+
+    await axios
+      .post("http://localhost:4000/products/create-products", new_product, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("glob_token")}`,
+        },
+      })
+      .then((data) => {
+        console.log("data", data);
+      })
+      .catch((e) => console.error(e));
   };
 
   return (
@@ -89,7 +154,7 @@ export default function CardCreateProduct() {
               Ajustes
             </button>
           </div>
-          <img src="https://online-store-s3.s3.us-east-2.amazonaws.com/6a9966aaa1557f14360144508f430fa6.jpg"></img>
+          <img src={image}></img>
         </div>
         <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
           <form onSubmit={imgToS3}>
@@ -98,6 +163,44 @@ export default function CardCreateProduct() {
             </h6>
             <div className="flex flex-wrap">
               <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                    htmlFor="name"
+                  >
+                    Selecciona la Categoría
+                  </label>
+                  <select
+                    id="category"
+                    name="category"
+                    type="select"
+                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                    onChange={handleSelectChange}
+                  >
+                    {inventory.map((i, idx) => (
+                        <option key={idx} value={i.id}>{i.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="relative w-full mb-3">
+                  <label
+                    className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                    htmlFor="supplier"
+                  >
+                    Selecciona el Proveedor
+                  </label>
+                  <select
+                    id="supplier"
+                    name="supplier"
+                    type="select"
+                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                    onChange={handleSupChange}
+                  >
+                    {suppliers.map((i, idx) => (
+                        <option key={idx} value={i.id}>{i.name} {i.lastname}</option>
+                    ))}
+                  </select>
+                </div>
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
@@ -129,6 +232,23 @@ export default function CardCreateProduct() {
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     onChange={handleChange}
                     defaultValue="500"
+                  />
+                </div>
+              </div>
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                    htmlFor="quantity"
+                  >
+                    Cantidad
+                  </label>
+                  <input
+                    id="quantity"
+                    type="number"
+                    name="quantity"
+                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                    onChange={handleChange}
                   />
                 </div>
               </div>

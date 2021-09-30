@@ -28,7 +28,9 @@ export default function Login() {
   const login = async (e) => {
     console.log("data log", log);
     e.preventDefault();
-    await axios
+
+    try {
+      await axios
       .post("http://localhost:4000/auth/login", log, {
         headers: {
           "Content-Type": "application/json",
@@ -36,11 +38,13 @@ export default function Login() {
         },
       })
       .then((data) => {
-        console.log("token", data);
         set_glob_token(data.data.token);
         router.push("/admin/dashboard");
       })
       .catch((e) => console.error(e));
+    } catch (error) {
+      console.error(e)
+    }
   };
 
   return (
