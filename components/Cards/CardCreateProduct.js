@@ -93,15 +93,16 @@ export default function CardCreateProduct() {
       },
       body: file,
     }).then(async () => {
-      console.log("set image", image);
-      await create_product(image);
+      console.log("set image !!!!", image);
+      const imageUrl = url.split("?")[0];
+      await create_product(imageUrl);
       router.push("/admin/products");
     });
 
     // wait for aws response & get the img url
 
-    const imageUrl = url.split("?")[0];
-    console.log("imageUrl", imageUrl);
+
+    // console.log("imageUrl !!!!!", imageUrl);
 
     // post requst to my server to store any extra data
   };
@@ -231,7 +232,7 @@ export default function CardCreateProduct() {
                     name="unit_cost"
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     onChange={handleChange}
-                    defaultValue="500"
+                    placeholder="0"
                   />
                 </div>
               </div>
@@ -266,7 +267,7 @@ export default function CardCreateProduct() {
                     name="unit_price"
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     onChange={handleChange}
-                    defaultValue="1000"
+                    placeholder="1000"
                   />
                 </div>
               </div>
