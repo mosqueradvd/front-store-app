@@ -7,6 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "@fortawesome/fontawesome-free": "5.15.3",
+    "@material-tailwind/react": "0.3.4",
     "@popperjs/core": "2.9.1",
     "@tailwindcss/forms": "0.2.1",
     "axios": "^0.21.4",
@@ -20,7 +21,8 @@
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-scripts": "4.0.3",
-    "tailwindcss": "2.0.4"
+    "tailwindcss": "2.0.4",
+    "tailwindcss-toggle": "TowelSoftware/tailwindcss-toggle"
   },
   "scripts": {
     "start": "next start",

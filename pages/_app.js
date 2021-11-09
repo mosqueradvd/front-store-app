@@ -7,6 +7,7 @@ import Router from "next/router";
 import PageChange from "components/PageChange/PageChange.js";
 
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import '@material-tailwind/react/tailwind.css'
 import "styles/tailwind.css";
 
 export default class MyApp extends App {
