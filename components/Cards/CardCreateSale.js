@@ -113,7 +113,27 @@ export default function CardCreateSale() {
       })
       .then((response) => {
         console.log('data', response)
-        router.push('/admin/sales')
+        //router.push('/admin/sales')
+      })
+      .catch((e) => console.error(e))
+  }
+  const create_sale_product_debt = async (e) => {
+    const new_sale_product = {
+      id_product: prod.prods,
+      quantity_sale: quantity_sale.quantity_sale,
+    }
+    console.log('Ventas productos:', new_sale_product)
+    e.preventDefault()
+    await axios
+      .post('http://localhost:4000/api/sales/sale_debt', new_sale_product, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('glob_token')}`,
+        },
+      })
+      .then((response) => {
+        console.log('data', response)
+        //router.push('/admin/sales')
       })
       .catch((e) => console.error(e))
   }
@@ -224,7 +244,7 @@ export default function CardCreateSale() {
               Crear venta
             </Button>
           </form>
-          <form onSubmit={create_sale_product}>
+          <form >
             <Modal
               size='large'
               active={showModal}
@@ -286,9 +306,14 @@ export default function CardCreateSale() {
                   Close
                 </Button>
 
-                <Button color='green' type='submit' ripple='light'>
-                  Save Changes
+                <Button color='green' type='submit' onClick={create_sale_product} ripple='light'>
+                  Venta
                 </Button>
+
+                <Button color='red' type='submit' ripple='light' onClick={create_sale_product_debt}>
+                  Deuda
+                </Button>
+            
               </ModalFooter>
             </Modal>
           </form>

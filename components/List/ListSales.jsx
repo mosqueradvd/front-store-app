@@ -135,7 +135,7 @@ export default function ListSales({ color }) {
                                   {moment(sale.date_sale).format("DD-MMM-YYYY")}
                                 </td>
                                 <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
-                                  ${(sale.total_sale).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                  ${sale.total_sale}
                                 </td>
                                 <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
                                   {cli.phone}

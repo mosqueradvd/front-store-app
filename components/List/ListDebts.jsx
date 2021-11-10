@@ -135,7 +135,7 @@ export default function ListDebts({ color }) {
                                   {moment(debt.date_sale).format("DD-MMM-YYYY")}
                                 </td>
                                 <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
-                                  ${(debt.total_debt).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                  ${debt.total_debt}
                                 </td>
                                 <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
                                   {cli.phone}
