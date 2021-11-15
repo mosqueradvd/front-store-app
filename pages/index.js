@@ -276,7 +276,7 @@ export default function Index() {
                         src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/logos/svelte.jpg"
                       />
                       <p className="text-lg text-white mt-4 font-semibold">
-                        Svelte
+                        Sveltes
                       </p>
                     </div>
                   </a>

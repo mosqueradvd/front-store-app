@@ -3,3 +3,9 @@
 @tailwind components;
 
 @tailwind utilities;
+
+.clase {
+  background: #000;
+  display: flex;
+  justify-content: center;
+}
