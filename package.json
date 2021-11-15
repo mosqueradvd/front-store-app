@@ -23,6 +23,7 @@
     "react-dom": "17.0.1",
     "react-scripts": "4.0.3",
     "sweetalert": "^2.1.2",
+    "sweetalert2": "^11.1.10",
     "tailwindcss": "2.0.4",
     "tailwindcss-toggle": "TowelSoftware/tailwindcss-toggle"
   },
