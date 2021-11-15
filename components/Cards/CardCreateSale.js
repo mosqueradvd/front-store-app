@@ -11,6 +11,10 @@ import ModalFooter from '@material-tailwind/react/ModalFooter'
 import moment from 'moment'
 import TableDropdown from 'components/Dropdowns/TableDropdown.js'
 import Icon from '@material-tailwind/react/Icon'
+import swal from 'sweetalert'
+import Swal from 'sweetalert2'
+import Radio from '@material-tailwind/react/Radio'
+import { flex } from 'tailwindcss/defaultTheme'
 
 export default function CardCreateSale() {
   let arr = []
@@ -23,10 +27,13 @@ export default function CardCreateSale() {
   const [clients, setClients] = useState([])
   const [client, setClient] = useState([])
   const [shopcar, setShopCar] = useState([])
+  const [shopcardebt, setShopCarDebt] = useState([])
   const [prod, setProd] = useState([])
   const [prods, setProds] = useState([])
+  const [status, setStatus] = useState(1)
+
   const [sale, setSale] = useState({
-    status: '',
+    status: status,
     description: '',
   })
   const [quantity_sale, setQuantity] = useState({
@@ -40,7 +47,7 @@ export default function CardCreateSale() {
     })
   }
   const handleClientChange = (e) => {
-    let value = e.target.value
+    let value = e.currentTarget.value
     console.log('client', value)
     setClient(value)
 
@@ -67,7 +74,24 @@ export default function CardCreateSale() {
       [e.target.name]: value,
     })
   }
+  const showAlertSuccess = () => {
+    Swal.fire({
+      title: 'Producto agregado al carrito.',
+      text: 'El producto ha sido agregado a la venta actual.',
+      icon: 'success',
+      button: 'Aceptar',
+    })
+  }
 
+  const showAlertWarning = () => {
+    Swal.fire({
+      title: 'Algo salio mal',
+      text: 'No hay stock disponible.',
+      icon: 'warning',
+      button: 'Aceptar',
+    })
+  }
+  console.log('status', status)
   const getcurrentSale = async () => {
     const resp = await fetch(
       'http://localhost:4000/api/sales/get-currentsale',
@@ -107,6 +131,18 @@ export default function CardCreateSale() {
     await getcurrentSale()
   }
 
+  const get_shop_cart_debt = async () => {
+    const resp = await fetch('http://localhost:4000/products/shop-car-debt', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('glob_token')}`,
+      },
+    })
+    const data = await resp.json()
+    setShopCarDebt(data.arr)
+    console.log('shop_cart', data.arr)
+    await getcurrentSale()
+  }
+
   const get_inventory = async () => {
     const resp = await fetch(
       'http://localhost:4000/api/inventory/get-inventory',
@@ -138,22 +174,22 @@ export default function CardCreateSale() {
     }
     console.log('Ventas productos:', new_sale_product)
     e.preventDefault()
-    await axios.post(
-      'http://localhost:4000/api/sales/sale_product',
-      new_sale_product,
-      {
+    await axios
+      .post('http://localhost:4000/api/sales/sale_product', new_sale_product, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('glob_token')}`,
         },
-      }
-    )
-    await get_shop_cart()
-      .then((response) => {
-        console.log('data', response)
+      })
+      .then(async (response) => {
+        console.log(response)
+        await showAlertSuccess()
         //router.push('/admin/sales')
       })
-      .catch((e) => console.error(e))
+      .catch(async (e) => {
+        await showAlertWarning()
+      })
+    await get_shop_cart()
   }
   const create_sale_product_debt = async (e) => {
     const new_sale_product = {
@@ -169,6 +205,15 @@ export default function CardCreateSale() {
           Authorization: `Bearer ${localStorage.getItem('glob_token')}`,
         },
       })
+      .then(async (response) => {
+        console.log(response)
+        await showAlertSuccess()
+        //router.push('/admin/sales')
+      })
+      .catch(async (e) => {
+        await showAlertWarning()
+      })
+    await get_shop_cart_debt()
       .then((response) => {
         console.log('data', response)
         //router.push('/admin/sales')
@@ -191,14 +236,15 @@ export default function CardCreateSale() {
     })
     await getcurrentSale()
     await get_shop_cart()
+    await get_shop_cart_debt()
       .then((response) => console.log('data', response))
       .catch((e) => console.error(e))
   }
   const delete_product_car = async (e) => {
-    console.log('id_product_delete', e.target.id)
+    console.log('id_product_delete', e.currentTarget.id)
     e.preventDefault()
     await axios.delete(
-      `http://localhost:4000/api/sales/delete_sale_product/${e.target.id}`,
+      `http://localhost:4000/api/sales/delete_sale_product/${e.currentTarget.id}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -215,10 +261,10 @@ export default function CardCreateSale() {
   }
 
   const delete_debt_product = async (e) => {
-    console.log('id_product_delete', e.target.id)
+    console.log('id_product_delete', e.currentTarget.id)
     e.preventDefault()
     await axios.delete(
-      `http://localhost:4000/api/sales/delete_sale_debt/${e.target.id}`,
+      `http://localhost:4000/api/sales/delete_sale_debt/${e.currentTarget.id}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -226,7 +272,7 @@ export default function CardCreateSale() {
         },
       }
     )
-    await get_shop_cart()
+    await get_shop_cart_debt()
       .then((response) => {
         console.log('data', response)
         //router.push('/admin/sales')
@@ -234,11 +280,12 @@ export default function CardCreateSale() {
       .catch((e) => console.error(e))
   }
 
-  useEffect(() => {
+  useEffect(async () => {
     get_clients()
     get_inventory()
-    get_shop_cart()
-    getcurrentSale()
+    await get_shop_cart()
+    await get_shop_cart_debt()
+    await getcurrentSale()
   }, [])
 
   return (
@@ -287,6 +334,7 @@ export default function CardCreateSale() {
                     className='border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150'
                     onChange={handleClientChange}
                   >
+                    <option value=''>Seleccione Cliente</option>
                     {clients?.map((i, idx) => (
                       <option key={idx} value={i.id}>
                         {i.name} {i.lastname}
@@ -294,10 +342,34 @@ export default function CardCreateSale() {
                     ))}
                   </select>
                 </div>
+                <div
+                  style={{
+                    display: 'flex',
+                    marginBottom: '20px',
+                    justifyContent: 'space-evenly',
+                  }}
+                >
+                  <Radio
+                    style={{}}
+                    color='lightBlue'
+                    text='Venta'
+                    id='venta'
+                    name='option'
+                    onClick={() => setStatus(1)}
+                  />
+
+                  <Radio
+                    color='lightBlue'
+                    text='Fiado'
+                    id='fiado'
+                    name='option'
+                    onClick={() => setStatus(0)}
+                  />
+                </div>
               </div>
             </div>
             {/*  <Toggle /> */}
-            <div className='relative w-full mb-3'>
+            {/* <div className='relative w-full mb-3'>
               <label
                 className='block uppercase text-blueGray-600 text-xs font-bold mb-2'
                 htmlFor='name'
@@ -311,7 +383,7 @@ export default function CardCreateSale() {
                 className='border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150'
                 onChange={handleSaleChange}
               />
-            </div>
+            </div> */}
             <div className='relative w-full mb-3'>
               <label
                 className='block uppercase text-blueGray-600 text-xs font-bold mb-2'
@@ -354,9 +426,16 @@ export default function CardCreateSale() {
                               <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
                                 {moment(sale.date_sale).format('DD-MMM-YYYY')}
                               </td>
-                              <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
-                                ${sale.total_sale}
-                              </td>
+                              {sale.total_sale > 0 ? (
+                                <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
+                                  ${sale.total_sale}
+                                </td>
+                              ) : (
+                                <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
+                                  ${sale.total_debt}
+                                </td>
+                              )}
+
                               <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
                                 {cli.phone}
                               </td>
@@ -374,12 +453,13 @@ export default function CardCreateSale() {
                 })}
               </tbody>
 
-              {shopcar.map((prod) => (
-                <>
-                  <table className='items-center w-full bg-transparent border-collapse'>
-                    <thead>
-                      <tr>
-                        {/*    <th className='px-6 align-middle py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left '></th>
+              {shopcar.length > 0
+                ? shopcar.map((prod) => (
+                    <>
+                      <table className='items-center w-full bg-transparent border-collapse'>
+                        <thead>
+                          <tr>
+                            {/*    <th className='px-6 align-middle py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left '></th>
 
                         <th className='px-6 align-middle py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left '>
                           Producto
@@ -387,52 +467,115 @@ export default function CardCreateSale() {
                         <th className='px-6 align-middle  py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left '>
                           Producto
                         </th> */}
-                      </tr>
-                    </thead>
+                          </tr>
+                        </thead>
 
-                    <tbody>
-                      <tr>
-                        <th className='border-t-1 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center'>
-                          <img
-                            src={prod.image}
-                            className='bg-white rounded-md border'
-                            alt='...'
-                            width='150'
-                            height='100'
-                          />
+                        <tbody>
+                          <tr>
+                            <th className='border-t-1 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center'>
+                              <img
+                                src={prod.image}
+                                className='bg-white rounded-md border'
+                                alt='...'
+                                width='150'
+                                height='100'
+                              />
+                            </th>
+
+                            <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
+                              {prod.name}
+                            </td>
+
+                            <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
+                              {moment(prod.expiration_date).format(
+                                'DD-MMM-YYYY'
+                              )}
+                            </td>
+                            <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
+                              {'$ ' + prod.price_sale}
+                            </td>
+
+                            <td>
+                              <Button
+                                color='red'
+                                buttonType='filled'
+                                size='regular'
+                                rounded={false}
+                                block={false}
+                                iconOnly={false}
+                                ripple='light'
+                                onClick={(event) => delete_product_car(event)}
+                                id={prod.id_carproduct}
+                              >
+                                <Icon name='delete' size='sm' />
+                              </Button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </>
+                  ))
+                : shopcardebt.map((prod) => (
+                    <>
+                      <table className='items-center w-full bg-transparent border-collapse'>
+                        <thead>
+                          <tr>
+                            {/*    <th className='px-6 align-middle py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left '></th>
+
+                        <th className='px-6 align-middle py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left '>
+                          Producto
                         </th>
+                        <th className='px-6 align-middle  py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left '>
+                          Producto
+                        </th> */}
+                          </tr>
+                        </thead>
 
-                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
-                          {prod.name}
-                        </td>
+                        <tbody>
+                          <tr>
+                            <th className='border-t-1 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center'>
+                              <img
+                                src={prod.image}
+                                className='bg-white rounded-md border'
+                                alt='...'
+                                width='150'
+                                height='100'
+                              />
+                            </th>
 
-                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
-                          {moment(prod.expiration_date).format('DD-MMM-YYYY')}
-                        </td>
-                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
-                          {'$ ' + prod.price_sale}
-                        </td>
+                            <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
+                              {prod.name}
+                            </td>
 
-                        <td>
-                          <Button
-                            color='red'
-                            buttonType='filled'
-                            size='regular'
-                            rounded={false}
-                            block={false}
-                            iconOnly={false}
-                            ripple='light'
-                            onClick={(event) => delete_product_car(event)}
-                            id={prod.id_carproduct}
-                          >
-                            <Icon name='delete' size='sm' />
-                          </Button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </>
-              ))}
+                            <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
+                              {moment(prod.expiration_date).format(
+                                'DD-MMM-YYYY'
+                              )}
+                            </td>
+                            <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
+                              {'$ ' + prod.price_sale}
+                            </td>
+
+                            <td>
+                              <Button
+                                color='red'
+                                buttonType='filled'
+                                size='regular'
+                                rounded={false}
+                                block={false}
+                                iconOnly={false}
+                                ripple='light'
+                                onClick={(event) => delete_debt_product(event)}
+                                id={prod.id_carproduct}
+                              >
+                                <Icon name='delete' size='sm' />
+                              </Button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </>
+                  ))}
             </>
 
             <Button
@@ -454,7 +597,7 @@ export default function CardCreateSale() {
               </ModalHeader>
               <ModalBody>
                 <div className='flex flex-wrap'>
-                  <div className='w-full lg:w-6/12 px-4'>
+                  <div className='w-full lg:w-px-4'>
                     <div className='relative w-full mb-3'>
                       <label
                         className='block uppercase text-blueGray-600 text-xs font-bold mb-2'
@@ -469,6 +612,7 @@ export default function CardCreateSale() {
                         className='border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150'
                         onChange={handleProductChange}
                       >
+                        <option>Seleccione</option>
                         {prods?.map((i, idx) => (
                           <option key={idx} value={i.id}>
                             {i.name}
@@ -477,51 +621,43 @@ export default function CardCreateSale() {
                       </select>
                     </div>
                   </div>
-                </div>
-
-                <div className='relative w-full mb-3'>
-                  <label
-                    className='block uppercase text-blueGray-600 text-xs font-bold mb-2'
-                    htmlFor='quantity_sale'
-                  >
-                    Cantidad
-                  </label>
-                  <input
-                    id='quantity_sale'
-                    name='quantity_sale'
-                    type='text'
-                    className='border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150'
-                    onChange={handleQuantityChange}
-                  />
+                  <div className='relative w-full mb-3'>
+                    <label
+                      className='block uppercase text-blueGray-600 text-xs font-bold mb-2'
+                      htmlFor='quantity_sale'
+                    >
+                      Cantidad
+                    </label>
+                    <input
+                      id='quantity_sale'
+                      name='quantity_sale'
+                      type='text'
+                      className='border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-40 ease-linear transition-all duration-150'
+                      onChange={handleQuantityChange}
+                    />
+                  </div>
                 </div>
               </ModalBody>
               <ModalFooter>
-                <Button
-                  color='red'
-                  buttonType='link'
-                  onClick={(e) => setShowModal(false)}
-                  ripple='dark'
-                >
-                  Close
-                </Button>
-
-                <Button
-                  color='green'
-                  type='submit'
-                  onClick={create_sale_product}
-                  ripple='light'
-                >
-                  Venta
-                </Button>
-
-                <Button
-                  color='red'
-                  type='submit'
-                  ripple='light'
-                  onClick={create_sale_product_debt}
-                >
-                  Deuda
-                </Button>
+                {status === 1 ? (
+                  <Button
+                    color='green'
+                    type='submit'
+                    onClick={create_sale_product}
+                    ripple='light'
+                  >
+                    Venta
+                  </Button>
+                ) : (
+                  <Button
+                    color='red'
+                    type='submit'
+                    onClick={create_sale_product_debt}
+                    ripple='light'
+                  >
+                    Fiado
+                  </Button>
+                )}
               </ModalFooter>
             </Modal>
           </form>
