@@ -8,15 +8,21 @@ import Modal from '@material-tailwind/react/Modal'
 import ModalHeader from '@material-tailwind/react/ModalHeader'
 import ModalBody from '@material-tailwind/react/ModalBody'
 import ModalFooter from '@material-tailwind/react/ModalFooter'
+import moment from 'moment'
+import TableDropdown from 'components/Dropdowns/TableDropdown.js'
+import Icon from '@material-tailwind/react/Icon'
 
 export default function CardCreateSale() {
   let arr = []
+  const [sales_current, setSale_Current] = useState([])
+  const [clients_current_sale, setClients_SaleCurrent] = useState([])
   const [showModal, setShowModal] = useState(false)
   const [toggle, setToggle] = useState(true)
   const toggleClass = ' transform translate-x-5'
   const router = useRouter()
   const [clients, setClients] = useState([])
   const [client, setClient] = useState([])
+  const [shopcar, setShopCar] = useState([])
   const [prod, setProd] = useState([])
   const [prods, setProds] = useState([])
   const [sale, setSale] = useState({
@@ -62,6 +68,22 @@ export default function CardCreateSale() {
     })
   }
 
+  const getcurrentSale = async () => {
+    const resp = await fetch(
+      'http://localhost:4000/api/sales/get-currentsale',
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('glob_token')}`,
+        },
+      }
+    )
+    const data = await resp.json()
+    console.log('Sales_current', data.sales)
+    console.log('Clients_current', data.clients)
+    setSale_Current(data.sales)
+    setClients_SaleCurrent(data.clients)
+  }
+
   const get_clients = async () => {
     const resp = await fetch('http://localhost:4000/client/get-client', {
       headers: {
@@ -71,6 +93,18 @@ export default function CardCreateSale() {
     const data = await resp.json()
     setClients(data.client)
     console.log('clients', data.client)
+  }
+
+  const get_shop_cart = async () => {
+    const resp = await fetch('http://localhost:4000/products/shop-car', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('glob_token')}`,
+      },
+    })
+    const data = await resp.json()
+    setShopCar(data.arr)
+    console.log('shop_cart', data.arr)
+    await getcurrentSale()
   }
 
   const get_inventory = async () => {
@@ -104,13 +138,17 @@ export default function CardCreateSale() {
     }
     console.log('Ventas productos:', new_sale_product)
     e.preventDefault()
-    await axios
-      .post('http://localhost:4000/api/sales/sale_product', new_sale_product, {
+    await axios.post(
+      'http://localhost:4000/api/sales/sale_product',
+      new_sale_product,
+      {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('glob_token')}`,
         },
-      })
+      }
+    )
+    await get_shop_cart()
       .then((response) => {
         console.log('data', response)
         //router.push('/admin/sales')
@@ -145,24 +183,77 @@ export default function CardCreateSale() {
     const new_sale = { id_client: client.client, ...sale }
     console.log('Sale', new_sale)
     e.preventDefault()
-    await axios
-      .post('http://localhost:4000/api/sales/sale', new_sale, {
+    await axios.post('http://localhost:4000/api/sales/sale', new_sale, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('glob_token')}`,
+      },
+    })
+    await getcurrentSale()
+    await get_shop_cart()
+      .then((response) => console.log('data', response))
+      .catch((e) => console.error(e))
+  }
+  const delete_product_car = async (e) => {
+    console.log('id_product_delete', e.target.id)
+    e.preventDefault()
+    await axios.delete(
+      `http://localhost:4000/api/sales/delete_sale_product/${e.target.id}`,
+      {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('glob_token')}`,
         },
+      }
+    )
+    await get_shop_cart()
+      .then((response) => {
+        console.log('data', response)
+        //router.push('/admin/sales')
       })
-      .then((response) => console.log('data', response))
+      .catch((e) => console.error(e))
+  }
+
+  const delete_debt_product = async (e) => {
+    console.log('id_product_delete', e.target.id)
+    e.preventDefault()
+    await axios.delete(
+      `http://localhost:4000/api/sales/delete_sale_debt/${e.target.id}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('glob_token')}`,
+        },
+      }
+    )
+    await get_shop_cart()
+      .then((response) => {
+        console.log('data', response)
+        //router.push('/admin/sales')
+      })
       .catch((e) => console.error(e))
   }
 
   useEffect(() => {
     get_clients()
     get_inventory()
+    get_shop_cart()
+    getcurrentSale()
   }, [])
 
   return (
     <>
+      <link
+        href='https://fonts.googleapis.com/icon?family=Material+Icons'
+        rel='stylesheet'
+      />
+
+      <link
+        rel='stylesheet'
+        href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css'
+        integrity='sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=='
+        crossOrigin='anonymous'
+      />
       <div className='relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0'>
         <div className='rounded-t bg-white mb-0 px-6 py-6'>
           <div className='text-center flex justify-between'>
@@ -236,15 +327,123 @@ export default function CardCreateSale() {
                 onChange={handleSaleChange}
               />
             </div>
+
+            <>
+              <label
+                className='block uppercase text-blueGray-600 text-xs font-bold mb-2'
+                htmlFor='quantity_sale'
+              >
+                Venta Actual
+              </label>
+              <tbody>
+                {sales_current.map((sale) => {
+                  return (
+                    <>
+                      {clients_current_sale.map((cli) => (
+                        <>
+                          {sale.id_client === cli.id &&
+                          sales_current.length > 0 ? (
+                            <tr>
+                              <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
+                                {cli.name} {cli.lastname}
+                              </td>
+
+                              <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
+                                {sale.description}
+                              </td>
+                              <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
+                                {moment(sale.date_sale).format('DD-MMM-YYYY')}
+                              </td>
+                              <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
+                                ${sale.total_sale}
+                              </td>
+                              <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
+                                {cli.phone}
+                              </td>
+                              <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right'>
+                                <TableDropdown />
+                              </td>
+                            </tr>
+                          ) : (
+                            console.log('jeje')
+                          )}
+                        </>
+                      ))}
+                    </>
+                  )
+                })}
+              </tbody>
+
+              {shopcar.map((prod) => (
+                <>
+                  <table className='items-center w-full bg-transparent border-collapse'>
+                    <thead>
+                      <tr>
+                        {/*    <th className='px-6 align-middle py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left '></th>
+
+                        <th className='px-6 align-middle py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left '>
+                          Producto
+                        </th>
+                        <th className='px-6 align-middle  py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left '>
+                          Producto
+                        </th> */}
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <tr>
+                        <th className='border-t-1 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center'>
+                          <img
+                            src={prod.image}
+                            className='bg-white rounded-md border'
+                            alt='...'
+                            width='150'
+                            height='100'
+                          />
+                        </th>
+
+                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
+                          {prod.name}
+                        </td>
+
+                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
+                          {moment(prod.expiration_date).format('DD-MMM-YYYY')}
+                        </td>
+                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4'>
+                          {'$ ' + prod.price_sale}
+                        </td>
+
+                        <td>
+                          <Button
+                            color='red'
+                            buttonType='filled'
+                            size='regular'
+                            rounded={false}
+                            block={false}
+                            iconOnly={false}
+                            ripple='light'
+                            onClick={(event) => delete_product_car(event)}
+                            id={prod.id_carproduct}
+                          >
+                            <Icon name='delete' size='sm' />
+                          </Button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </>
+              ))}
+            </>
+
             <Button
               className='bg-blueGray-700 active:bg-blueGray-600 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150'
               type='submit'
               onClick={(e) => setShowModal(true)}
             >
-              Crear venta
+              Agregar producto
             </Button>
           </form>
-          <form >
+          <form>
             <Modal
               size='large'
               active={showModal}
@@ -306,14 +505,23 @@ export default function CardCreateSale() {
                   Close
                 </Button>
 
-                <Button color='green' type='submit' onClick={create_sale_product} ripple='light'>
+                <Button
+                  color='green'
+                  type='submit'
+                  onClick={create_sale_product}
+                  ripple='light'
+                >
                   Venta
                 </Button>
 
-                <Button color='red' type='submit' ripple='light' onClick={create_sale_product_debt}>
+                <Button
+                  color='red'
+                  type='submit'
+                  ripple='light'
+                  onClick={create_sale_product_debt}
+                >
                   Deuda
                 </Button>
-            
               </ModalFooter>
             </Modal>
           </form>

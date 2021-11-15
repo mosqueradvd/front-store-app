@@ -428,7 +428,7 @@ export default function Sidebar() {
             {/* Navigation */}
             <ul className='md:flex-col md:min-w-full flex flex-col list-none md:mb-4'>
               <li className='items-center'>
-                <Link href='/admin/supplier'>
+                <Link href='/admin/report'>
                   <a
                     href='#pablo'
                     className={
