@@ -23,6 +23,7 @@ export default function CardLineChart() {
   sales.map(index => dataSet.push({t: moment(index.date_sale).format('DD-MMM'), y: index.total_sale}))
   sales.map(index => timing.push(moment(index.date_sale).format('DD-MMM')))
   console.log(dataSet)
+  
   React.useEffect(() => {
     getSales()
     var config = {

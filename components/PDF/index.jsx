@@ -20,7 +20,6 @@ const currentMonth = month.toLocaleString("es-ES", { month: "long" });
 const year = new Date().getFullYear();
 
 function ReactPDF({ prods, totalSales }) {
-  const [sales, setSales] = useState([]);
 
   const awsURL = "https://i.imgur.com/XZM9ePZ.png";
   return (
