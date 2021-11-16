@@ -1,4 +1,4 @@
-define("./workbox-1ffba242.js",['exports'], function (exports) { 'use strict';
+define("./workbox-1ffba242.js",['exports'], (function (exports) { 'use strict';
 
     try {
       self['workbox:core:6.2.4'] && _();
@@ -2728,5 +2728,5 @@ define("./workbox-1ffba242.js",['exports'], function (exports) { 'use strict';
     exports.clientsClaim = clientsClaim;
     exports.registerRoute = registerRoute;
 
-});
+}));
 //# sourceMappingURL=workbox-1ffba242.js.map
