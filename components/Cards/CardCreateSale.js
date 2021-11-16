@@ -11,10 +11,9 @@ import ModalFooter from '@material-tailwind/react/ModalFooter'
 import moment from 'moment'
 import TableDropdown from 'components/Dropdowns/TableDropdown.js'
 import Icon from '@material-tailwind/react/Icon'
-import swal from 'sweetalert'
 import Swal from 'sweetalert2'
 import Radio from '@material-tailwind/react/Radio'
-import { flex } from 'tailwindcss/defaultTheme'
+
 
 export default function CardCreateSale() {
   let arr = []

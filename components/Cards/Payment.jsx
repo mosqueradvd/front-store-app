@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import moment from 'moment'
 import { useRouter } from 'next/router'
+import Swal from 'sweetalert2'
 
 
 function Payment() {
@@ -17,6 +18,23 @@ function Payment() {
     setPay({
       ...pay,
       [e.target.name]: value,
+    })
+  }
+  const showAlertSuccess = () => {
+    Swal.fire({
+      title: 'Pago realizado.',
+      text: 'El abono ha sido registrado correctamente.',
+      icon: 'success',
+      button: 'Aceptar',
+    })
+  }
+
+  const showAlertWarning = () => {
+    Swal.fire({
+      title: 'Algo salio mal',
+      text: 'El valor supera al monto solicitado.',
+      icon: 'warning',
+      button: 'Aceptar',
     })
   }
 
@@ -58,9 +76,12 @@ function Payment() {
     })
     .then((response) => {
       console.log('data', response)
-      router.push('/admin/debts')
+      showAlertSuccess()
+    //  router.push('/admin/debts')
     })
-    .catch((e) => console.error(e))
+    .catch((e) => {
+      showAlertWarning()
+    })
   }
   useEffect(() => {
     getDebts()

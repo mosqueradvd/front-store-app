@@ -1,37 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Chart from "chart.js";
+import moment from 'moment'
+
 
 export default function CardBarChart() {
+  const [debts, setDebts] = useState([]);
+  let dataSet = []
+  let timing = []
+  const getDebts = async () => {
+    const resp = await fetch(
+      "http://localhost:4000/api/sales/get-debts",
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("glob_token")}`,
+        },
+      }
+    );
+    const data = await resp.json();
+    console.log('Sales', data.Debt)
+    setDebts(data.Debt)
+  }
+  debts.map(index => dataSet.push({t: moment(index.date_sale).format('DD-MMM'), y: index.total_debt}))
+  debts.map(index => timing.push(moment(index.date_sale).format('DD-MMM')))
+console.log(dataSet)
   React.useEffect(() => {
+    getDebts()
     let config = {
       type: "bar",
       data: {
-        labels: [
-          "Enero",
-          "Febrero",
-          "Marzo",
-          "Abril",
-          "Mayo",
-          "Junio",
-          "Julio",
-        ],
+        labels: timing,
         datasets: [
           {
             label: new Date().getFullYear(),
             backgroundColor: "#ed64a6",
             borderColor: "#ed64a6",
-            data: [30, 78, 56, 34, 100, 45, 13],
+            data: dataSet,
             fill: false,
             barThickness: 8,
-          },
-          {
-            label: new Date().getFullYear() - 1,
-            fill: false,
-            backgroundColor: "#4c51bf",
-            borderColor: "#4c51bf",
-            data: [27, 68, 86, 74, 10, 4, 87],
-            barThickness: 8,
-          },
+          }
         ],
       },
       options: {
@@ -108,7 +114,7 @@ export default function CardBarChart() {
                 Rendimiento
               </h6>
               <h2 className="text-blueGray-700 text-xl font-semibold">
-                Ordenes totales
+                Cuentas Por Cobrar
               </h2>
             </div>
           </div>

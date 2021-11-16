@@ -1,34 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+
 import Chart from "chart.js";
+import moment from 'moment'
 
 export default function CardLineChart() {
+  const [sales, setSales] = useState([]);
+  let dataSet = []
+  let timing = []
+  const getSales = async () => {
+    const resp = await fetch(
+      "http://localhost:4000/api/sales/get-sales",
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("glob_token")}`,
+        },
+      }
+    );
+    const data = await resp.json();
+    console.log('Sales', data.sales)
+    setSales(data.sales)
+  }
+  sales.map(index => dataSet.push({t: moment(index.date_sale).format('DD-MMM'), y: index.total_sale}))
+  sales.map(index => timing.push(moment(index.date_sale).format('DD-MMM')))
+  console.log(dataSet)
   React.useEffect(() => {
+    getSales()
     var config = {
       type: "line",
       data: {
-        labels: [
-          "Enero",
-          "Febrero",
-          "Marzo",
-          "Abril",
-          "Mayo",
-          "Junio",
-          "Julio",
-        ],
+        labels: timing,
         datasets: [
           {
             label: new Date().getFullYear(),
             backgroundColor: "#4c51bf",
             borderColor: "#4c51bf",
-            data: [65, 78, 66, 44, 56, 67, 75],
+            data: dataSet,
             fill: false,
-          },
-          {
-            label: new Date().getFullYear() - 1,
-            fill: false,
-            backgroundColor: "#fff",
-            borderColor: "#fff",
-            data: [40, 68, 86, 74, 56, 60, 87],
           },
         ],
       },
