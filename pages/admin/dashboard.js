@@ -6,6 +6,7 @@ import CardLineChart from "components/Cards/CardLineChart.js";
 import CardBarChart from "components/Cards/CardBarChart.js";
 import CardPageVisits from "components/Cards/CardPageVisits.js";
 import CardSocialTraffic from "components/Cards/CardSocialTraffic.js";
+import DownloadPDF from "../../components/PDF/index";
 
 // layout for page
 
@@ -17,6 +18,13 @@ export default function Dashboard() {
       <div className="flex flex-wrap">
         <div className="w-full xl:w-8/12 mb-12 xl:mb-0 px-4">
           <CardLineChart />
+          <DownloadPDF
+            awsURL="chrome://favicon/size/64@1x/https://docs.google.com/document/u/1/"
+            projectName="DOCUMENT PDF"
+            projectLocation="BOGOTA"
+            prods="Galletas, gaseosa, cerveza, cigarrillos"
+            totalSales="$ 4.500.000"
+          />
         </div>
         <div className="w-full xl:w-4/12 px-4">
           <CardBarChart />

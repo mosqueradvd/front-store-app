@@ -96,7 +96,7 @@ export default function CardCreateProduct() {
       console.log("set image !!!!", image);
       const imageUrl = url.split("?")[0];
       await create_product(imageUrl);
-      router.push("/admin/products");
+     // router.push("/admin/products");
     });
 
     // wait for aws response & get the img url

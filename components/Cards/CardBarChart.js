@@ -20,9 +20,9 @@ export default function CardBarChart() {
     console.log('Sales', data.Debt)
     setDebts(data.Debt)
   }
+  console.log(dataSet)
   debts.map(index => dataSet.push({t: moment(index.date_sale).format('DD-MMM'), y: index.total_debt}))
   debts.map(index => timing.push(moment(index.date_sale).format('DD-MMM')))
-console.log(dataSet)
   React.useEffect(() => {
     getDebts()
     let config = {
