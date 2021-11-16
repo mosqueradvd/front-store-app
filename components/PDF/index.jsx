@@ -10,6 +10,7 @@ import {
 } from "@react-pdf/renderer";
 import PropTypes from "prop-types";
 import { saveAs } from "file-saver";
+import Button from "@material-tailwind/react/Button";
 
 const today = new Date();
 const time = today.getHours() + ":" + today.getMinutes();
@@ -18,17 +19,8 @@ const month = new Date();
 const currentMonth = month.toLocaleString("es-ES", { month: "long" });
 const year = new Date().getFullYear();
 
-function ReactPDF({
-  projectId,
-  projectName,
-  projectLocation,
-  projectValueInNumbers,
-  projectValueInLetters,
-  s3,
-}) {
-  const awsURL =
-    "https://www.canva.com/design?create&type=TAB7AVEOUWQ&template=EAEs-qmCVBQ&category=tACZCvjI6mE&layoutQuery=Logo&analyticsCorrelationId=27dcea10-7b34-464c-abe3-9023d1c755db&schema=web-2";
-  // const signature = s3.attached[0].attachedSignature;
+function ReactPDF({ prods, totalSales }) {
+  const awsURL = "https://i.imgur.com/XZM9ePZ.png";
   return (
     <Document>
       <Page>
@@ -47,7 +39,7 @@ function ReactPDF({
               fontWeight: 400,
             }}
           >
-            2
+            1
           </Text>
           <Text
             style={{
@@ -59,7 +51,7 @@ function ReactPDF({
               position: "absolute",
             }}
           >
-            CERTIFICACIÓN
+            Reporte {currentMonth}
           </Text>
           <View>
             <Text
@@ -71,48 +63,56 @@ function ReactPDF({
                 position: "absolute",
               }}
             >
-              El Gobernador del Cabildo indígena Quillasinga de Tangua Montaña
-              de fuego, del
+              Reporte con resumen de ventas del mes de {currentMonth}
             </Text>
             <Text
               style={{
-                marginTop: 215,
+                fontSize: 16,
+                marginLeft: 40,
+                marginTop: 250,
+                fontFamily: "Oswald",
+                position: "absolute",
+              }}
+            >
+              VENTAS
+            </Text>
+            <Text
+              style={{
+                marginTop: 280,
                 marginLeft: 40,
                 fontSize: 14,
                 fontFamily: "Times-Roman",
                 position: "absolute",
               }}
             >
-              municipio de projectLocation, CERTIFICA que en el Banco de
-              Proyectos para la
+              Se cerraron ventas por valor de : {totalSales}
             </Text>
             <Text
               style={{
-                marginTop: 230,
+                fontSize: 16,
+                marginLeft: 40,
+                marginTop: 310,
+                fontFamily: "Oswald",
+                position: "absolute",
+              }}
+            >
+              PRODUCTOS
+            </Text>
+            <Text
+              style={{
+                marginTop: 335,
                 marginLeft: 40,
                 fontSize: 14,
                 fontFamily: "Times-Roman",
                 position: "absolute",
               }}
             >
-              implementación del Plan de Vida de la Comunidad, se encuentra
-              registrado el siguiente
-            </Text>
-            <Text
-              style={{
-                marginTop: 245,
-                marginLeft: 40,
-                fontSize: 14,
-                fontFamily: "Times-Roman",
-                position: "absolute",
-              }}
-            >
-              proyecto:
+              Productos más vendidos : {prods}
             </Text>
           </View>
           <Text
             style={{
-              marginTop: 280,
+              marginTop: 380,
               marginLeft: 50,
               fontSize: 14,
               textAlign: "justify",
@@ -120,90 +120,8 @@ function ReactPDF({
               position: "absolute",
             }}
           >
-            Nombre del proyecto: {projectName}
-          </Text>
-          <Text
-            style={{
-              marginTop: 300,
-              marginLeft: 50,
-              fontSize: 14,
-              textAlign: "justify",
-              fontFamily: "Times-Roman",
-              position: "absolute",
-            }}
-          >
-            Ubicación: {projectLocation}
-          </Text>
-          <Text
-            style={{
-              marginTop: 320,
-              marginLeft: 50,
-              fontSize: 14,
-              textAlign: "justify",
-              fontFamily: "Times-Roman",
-              position: "absolute",
-            }}
-          >
-            Valor: {projectValueInNumbers} ({projectValueInLetters})
-          </Text>
-          <Text
-            style={{
-              marginTop: 370,
-              marginLeft: 50,
-              fontSize: 14,
-              textAlign: "justify",
-              fontFamily: "Times-Roman",
-              position: "absolute",
-            }}
-          >
-            Esta certificación se genera el {weekdayNumber} de {currentMonth} de{" "}
+            Este reporte se genera el {weekdayNumber} de {currentMonth} de{" "}
             {year} siendo las {time} horas
-          </Text>
-          <Text
-            style={{
-              marginTop: 440,
-              marginLeft: 50,
-              fontSize: 14,
-              textAlign: "justify",
-              fontFamily: "Times-Roman",
-              position: "absolute",
-            }}
-          >
-            Firma Autorizada,
-          </Text>
-          <Image
-            source="http://localhost:3000/img/team-1-800x800.jpg"
-            style={{
-              position: "absolute",
-              left: 65,
-              marginTop: 470,
-              width: 50,
-              height: 50,
-            }}
-          />
-          <Text
-            style={{
-              marginTop: 510,
-              marginLeft: 50,
-              fontSize: 14,
-              textAlign: "justify",
-              fontFamily: "Times-Roman",
-              position: "absolute",
-            }}
-          >
-            MELLER ALBEIRO MERCHANCANO,
-          </Text>
-          <Text
-            style={{
-              marginTop: 525,
-              marginLeft: 50,
-              fontSize: 14,
-              textAlign: "justify",
-              fontFamily: "Times-Roman",
-              position: "absolute",
-            }}
-          >
-            Gobernador
           </Text>
           <Text
             style={{
@@ -215,7 +133,9 @@ function ReactPDF({
               textAlign: "center",
               color: "grey",
             }}
-            render={({ pageNumber, totalPages }) => `$pageNumber / $totalPages`}
+            render={({ pageNumber, totalPages }) =>
+              `${pageNumber} / ${totalPages}`
+            }
             fixed
           />
         </View>
@@ -224,34 +144,27 @@ function ReactPDF({
   );
 }
 
-const LazyDownloadPDFButton = ({
-  id,
-  projectName,
-  projectLocation,
-  projectValueInNumbers,
-  projectValueInLetters,
-  awsURL,
-}) => (
-  <button
+const LazyDownloadPDFButton = ({ id, prods, totalSales, awsURL }) => (
+  <Button
+    color="blue"
+    buttonType="filled"
+    size="regular"
+    rounded={false}
+    block={false}
+    iconOnly={false}
+    ripple="light"
     onClick={async () => {
       const doc = (
-        <ReactPDF
-          projectId={id}
-          projectName={projectName}
-          projectLocation={projectLocation}
-          projectValueInNumbers={projectValueInNumbers}
-          s3={awsURL}
-        />
+        <ReactPDF prods={prods} totalSales={totalSales} s3={awsURL} />
       );
       const asPdf = pdf([]); // [] is important, throws error without an argument
       asPdf.updateContainer(doc);
       const blob = await asPdf.toBlob();
-      saveAs(blob, "REPORTE.pdf");
+      saveAs(blob, `Reporte ${currentMonth}.pdf`);
     }}
-    cursor="pointer"
   >
     DESCARGAR REPORTE
-  </button>
+  </Button>
 );
 
 LazyDownloadPDFButton.propTypes = {
