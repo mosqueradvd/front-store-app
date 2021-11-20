@@ -7,7 +7,10 @@ import CardStats from "components/Cards/CardStats.js";
 export default function HeaderStats() {
   const [clients, setClients] = useState([])
   const [sales, setSales] = useState([])
+  const [debts, setDebts] = useState([])
   const [income, setIncome] = useState([])
+
+  const formatter = new Intl.NumberFormat('en-US', { style:'currency', currency: 'USD'})
 
   const get_clients = async () => {
     const resp = await fetch('http://localhost:4000/client/get-client', {
@@ -19,9 +22,9 @@ export default function HeaderStats() {
     setClients(data.client)
     console.log('clients', data.client)
   }
-  const getSales = async () => {
+  const grandTotalSales = async () => {
     const resp = await fetch(
-      "http://localhost:4000/api/sales/get-sales",
+      "http://localhost:4000/api/sales/grand-total-sale",
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("glob_token")}`,
@@ -29,8 +32,21 @@ export default function HeaderStats() {
       }
     );
     const data = await resp.json();
-    console.log('Sales', data.sales)
-    setSales(data.sales)
+    console.log('Sales', data.grand_total)
+    setSales(data.grand_total)
+  }
+  const grandTotalDebts = async () => {
+    const resp = await fetch(
+      "http://localhost:4000/api/sales/grand-total-debt",
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("glob_token")}`,
+        },
+      }
+    );
+    const data = await resp.json();
+    console.log('Sales', data.grand_total)
+    setDebts(data.grand_total)
   }
   const getIncome = async () => {
     const resp = await fetch(
@@ -47,7 +63,8 @@ export default function HeaderStats() {
 
 useEffect(() => {
   get_clients()
-  getSales()
+  grandTotalSales()
+  grandTotalDebts()
   getIncome()
 }, [])
   return (
@@ -58,7 +75,7 @@ useEffect(() => {
           <div>
             {/* Card stats */}
             <div className="flex flex-wrap">
-              <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
+              <div className="w-4 lg:w-6/11 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle="CLIENTES"
                   statTitle={clients.length}
@@ -73,18 +90,30 @@ useEffect(() => {
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle="VENTAS"
-                  statTitle={sales.length}
+                  statTitle={formatter.format(sales)}
                   statArrow="down"
                   statPercent="1.10"
                   statPercentColor="text-orange-500"
                   statDescripiron="Desde ayer"
-                  statIconName="far fa-chart-bar"
+                  statIconName="far fa-chart-line"
                   statIconColor="bg-pink-500"
                 />
               </div>
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
-                  statSubtitle="UTILIDAD"
+                  statSubtitle="DEUDAS"
+                  statTitle={formatter.format(debts)}
+                  statArrow="up"
+                  statPercent="12"
+                  statPercentColor="text-emerald-500"
+                  statDescripiron="Desde el último mes"
+                  statIconName="fas fa-chart-bar"
+                  statIconColor="bg-lightBlue-500"
+                />
+              </div>
+              <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
+                <CardStats
+                  statSubtitle="MARGEN DE UTILIDAD"
                   statTitle={income}
                   statArrow="up"
                   statPercent="12"
@@ -94,6 +123,7 @@ useEffect(() => {
                   statIconColor="bg-lightBlue-500"
                 />
               </div>
+              
             </div>
           </div>
         </div>
