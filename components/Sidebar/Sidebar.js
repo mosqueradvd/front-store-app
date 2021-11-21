@@ -1,13 +1,13 @@
-import React from "react";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import React from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
-import NotificationDropdown from "components/Dropdowns/NotificationDropdown.js";
-import UserDropdown from "components/Dropdowns/UserDropdown.js";
+import NotificationDropdown from 'components/Dropdowns/NotificationDropdown.js'
+import UserDropdown from 'components/Dropdowns/UserDropdown.js'
 
 export default function Sidebar() {
-  const [collapseShow, setCollapseShow] = React.useState("hidden");
-  const router = useRouter();
+  const [collapseShow, setCollapseShow] = React.useState('hidden')
+  const router = useRouter()
   return (
     <>
       <nav className='md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6'>
@@ -138,7 +138,7 @@ export default function Sidebar() {
               </li>
 
               <li className='items-center'>
-                <Link href='/admin/create_product'>
+                <Link href='/admin/create_product' as='/admin/create_product'>
                   <a
                     href='#pablo'
                     className={
@@ -186,7 +186,7 @@ export default function Sidebar() {
               </li>
 
               <li className='items-center'>
-                <Link href='/admin/create_supplier'>
+                <Link href='/admin/create_supplier' as='/admin/create_supplier'>
                   <a
                     href='#pablo'
                     className={
@@ -290,7 +290,7 @@ export default function Sidebar() {
                 </Link>
               </li>
               <li className='items-center'>
-                <Link href='/admin/products'>
+                <Link href='/admin/products' as='/admin/products'>
                   <a
                     href='#pablo'
                     className={

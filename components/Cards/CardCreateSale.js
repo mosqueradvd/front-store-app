@@ -14,7 +14,6 @@ import Icon from '@material-tailwind/react/Icon'
 import Swal from 'sweetalert2'
 import Radio from '@material-tailwind/react/Radio'
 
-
 export default function CardCreateSale() {
   let arr = []
   const [sales_current, setSale_Current] = useState([])
@@ -582,7 +581,7 @@ export default function CardCreateSale() {
               type='submit'
               onClick={(e) => setShowModal(true)}
             >
-              Agregar producto
+              Crear Venta
             </Button>
           </form>
           <form>
@@ -645,7 +644,7 @@ export default function CardCreateSale() {
                     onClick={create_sale_product}
                     ripple='light'
                   >
-                    Venta
+                    Agregar producto
                   </Button>
                 ) : (
                   <Button
