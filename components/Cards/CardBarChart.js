@@ -1,26 +1,31 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
-import { Pie, Bar } from "react-chartjs-2";
+import { Pie, Bar, Doughnut } from "react-chartjs-2";
 
 export default function CardBarChart() {
-  const [debts, setDebts] = useState([]);
+  const [products, setProducts] = useState([]);
   let dataSet = [];
-  let timing = [];
-  const getDebts = async () => {
-    const resp = await fetch("http://localhost:4000/api/sales/get-debts", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("glob_token")}`
+  let names = [];
+
+  const getProducts = async () => {
+    const resp = await fetch(
+      "http://localhost:4000/api/products/most-seller-products",
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("glob_token")}`
+        }
       }
-    });
+    );
     const data = await resp.json();
-    console.log("Sales", data.Debt);
-    setDebts(data.Debt);
+    console.log("Sales", data.products);
+    setProducts(data.products);
   };
-  debts?.map(index => dataSet.push(index.total_debt));
-  debts?.map(index => timing.push(moment(index.date_sale).format("DD-MMM")));
+  products.map(index => dataSet.push(index.total));
+  products.map(index => names.push(index.name));
+
   console.log("totales", dataSet);
   useEffect(() => {
-    getDebts();
+    getProducts();
 
     /*     let config = {
       type: 'bar',
@@ -111,7 +116,7 @@ export default function CardBarChart() {
                 Rendimiento
               </h6>
               <h2 className="text-blueGray-700 text-xl font-semibold">
-                Cuentas Por Cobrar
+                Productos con mayores ventas
               </h2>
             </div>
           </div>
@@ -119,19 +124,25 @@ export default function CardBarChart() {
         <div className="p-4 flex-auto">
           {/* Chart */}
           <div className="relative h-350-px">
-            <Bar
+            <Pie
               data={{
-                labels: timing,
+                labels: names,
                 datasets: [
                   {
-                    label: "jajaja",
+                    label: "Productos",
                     data: dataSet,
-                    backgroundColor: "blue"
+                    backgroundColor: [
+                      "rgb(255, 99, 132)",
+                      "rgb(54, 162, 235)",
+                      "rgb(255, 205, 86)",
+                      "orange",
+                      "purple"
+                    ]
                   }
                 ]
               }}
-              height={400}
-              width={600}
+              width={570}
+              height={570}
             />
             {/*  <canvas id='bar-chart'></canvas> */}
           </div>

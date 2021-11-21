@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Line } from "react-chartjs-2";
+import { Bar, Line } from "react-chartjs-2";
 import moment from "moment";
 
 export default function CardLineChart() {
   const [sales, setSales] = useState([]);
+  const [debts, setDebts] = useState([]);
+
   let dataSet = [];
+  let dataSetDebt = [];
   let timing = [];
+
   const getSales = async () => {
-    const resp = await fetch("http://localhost:4000/api/sales/get-sales", {
+    const resp = await fetch("http://localhost:4000/api/sales/acc-sales", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("glob_token")}`
       }
@@ -16,16 +20,23 @@ export default function CardLineChart() {
     console.log("Sales", data.sales);
     setSales(data.sales);
   };
-  console.log(dataSet);
-  sales?.map(index =>
-    dataSet.push({
-      t: moment(index.date_sale).format("DD-MMM"),
-      y: index.total_sale
-    })
-  );
-  sales?.map(index => timing.push(moment(index.date_sale).format("DD-MMM")));
+  const getDebts = async () => {
+    const resp = await fetch("http://localhost:4000/api/sales/acc-debts", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("glob_token")}`
+      }
+    });
+    const data = await resp.json();
+    console.log("Sales", data.sales);
+    setDebts(data.sales);
+  };
+
+  sales.map(index => dataSet.push(index.total));
+  debts.map(index => dataSetDebt.push(index.total));
+  sales.map(index => timing.push(moment(index.Fecha_cierre).format("MMMM")));
   React.useEffect(() => {
     getSales();
+    getDebts();
     /* var config = {
       type: 'line',
       data: {
@@ -116,8 +127,8 @@ export default function CardLineChart() {
   }, []);
   return (
     <>
-      <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700">
-        <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
+      <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-white-700">
+        <div className="rounded-t mb-0 px-4 py-3 bg-white-700">
           <div className="flex flex-wrap items-center">
             <div className="relative w-full max-w-full flex-grow flex-1">
               <h6 className="uppercase text-blueGray-100 mb-1 text-xs font-semibold">
@@ -129,10 +140,55 @@ export default function CardLineChart() {
             </div>
           </div>
         </div>
-        <div className="p-4 flex-auto">
+        <div className="p-6 flex-auto">
           {/* Chart */}
           <div className="relative h-350-px">
-            <canvas id="line-chart"></canvas>
+            <Line
+              data={{
+                labels: timing,
+                datasets: [
+                  {
+                    label: "Ventas",
+                    data: dataSet,
+                    borderColor: "rgba(75,192,192,1)",
+                    backgroundColor: "rgba(75,192,192,1)",
+                    borderCapStyle: "butt",
+                    tension: 0.4,
+                    pointBorderWidth: 0,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                    pointHoverBorderColor: "rgba(220,220,220,1)",
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHitRadius: 10
+                  },
+                  {
+                    label: "Deudas",
+                    data: dataSetDebt,
+                    borderColor: "red",
+                    backgroundColor: "red",
+                    borderCapStyle: "butt",
+                    tension: 0.4,
+                    pointBorderWidth: 0,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                    pointHoverBorderColor: "rgba(220,220,220,1)",
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHitRadius: 10
+                  }
+                ]
+              }}
+              options={{
+                interaction: {
+                  mode: "index",
+                  intersect: false
+                },
+                maintainAspectRatio: false
+              }}
+              height={1000}
+              width={1000}
+            />
           </div>
         </div>
       </div>
