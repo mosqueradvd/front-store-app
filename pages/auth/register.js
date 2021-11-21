@@ -1,20 +1,14 @@
-<<<<<<< HEAD
-import React from "react";
-=======
 import React, { useState } from "react";
 import { useRouter, Router } from "next/router";
 import axios from "axios";
 
 import { set_glob_token } from "../../utils/set_token";
->>>>>>> 2e491054e682e227af983b20754abb1b933a592c
 
 // layout for page
 
 import Auth from "layouts/Auth.js";
 
 export default function Register() {
-<<<<<<< HEAD
-=======
   const router = useRouter();
 
   // const [sign_up, set_sign_up] = useState({
@@ -64,7 +58,6 @@ export default function Register() {
       .catch((e) => console.error(e));
   };
 
->>>>>>> 2e491054e682e227af983b20754abb1b933a592c
   return (
     <>
       <div className="container mx-auto px-4 h-full">
@@ -74,25 +67,11 @@ export default function Register() {
               <div className="rounded-t mb-0 px-6 py-6">
                 <div className="text-center mb-3">
                   <h6 className="text-blueGray-500 text-sm font-bold">
-<<<<<<< HEAD
-                    Sign up with
-=======
                     Regístrate con
->>>>>>> 2e491054e682e227af983b20754abb1b933a592c
                   </h6>
                 </div>
                 <div className="btn-wrapper text-center">
                   <button
-<<<<<<< HEAD
-                    className="bg-white active:bg-blueGray-50 text-blueGray-700 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-2 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
-                    type="button"
-                  >
-                    <img alt="..." className="w-5 mr-1" src="/img/github.svg" />
-                    Github
-                  </button>
-                  <button
-=======
->>>>>>> 2e491054e682e227af983b20754abb1b933a592c
                     className="bg-white active:bg-blueGray-50 text-blueGray-700 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
                     type="button"
                   >
@@ -104,36 +83,6 @@ export default function Register() {
               </div>
               <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
                 <div className="text-blueGray-400 text-center mb-3 font-bold">
-<<<<<<< HEAD
-                  <small>Or sign up with credentials</small>
-                </div>
-                <form>
-                  <div className="relative w-full mb-3">
-                    <label
-                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
-                    >
-                      Name
-                    </label>
-                    <input
-                      type="email"
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Name"
-                    />
-                  </div>
-
-                  <div className="relative w-full mb-3">
-                    <label
-                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
-                    >
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Email"
-=======
                   <small>O regístrate con credenciales</small>
                 </div>
                 <form onSubmit={signup}>
@@ -186,23 +135,12 @@ export default function Register() {
                       placeholder="Apodo"
                       defaultValue={sign_up.username}
                       onChange={handleChange}
->>>>>>> 2e491054e682e227af983b20754abb1b933a592c
                     />
                   </div>
 
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-<<<<<<< HEAD
-                      htmlFor="grid-password"
-                    >
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Password"
-=======
                       htmlFor="password"
                     >
                       Contraseña
@@ -269,7 +207,6 @@ export default function Register() {
                       placeholder="Nombre de tu Tienda"
                       defaultValue={sign_up.store_name}
                       onChange={handleChange}
->>>>>>> 2e491054e682e227af983b20754abb1b933a592c
                     />
                   </div>
 
@@ -281,15 +218,6 @@ export default function Register() {
                         className="form-checkbox border-0 rounded text-blueGray-700 ml-1 w-5 h-5 ease-linear transition-all duration-150"
                       />
                       <span className="ml-2 text-sm font-semibold text-blueGray-600">
-<<<<<<< HEAD
-                        I agree with the{" "}
-                        <a
-                          href="#pablo"
-                          className="text-lightBlue-500"
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          Privacy Policy
-=======
                         Estoy de acuerdo con{" "}
                         <a
                           href="/privacy-policy"
@@ -297,7 +225,6 @@ export default function Register() {
                           onClick={(e) => e.preventDefault()}
                         >
                           Política de Privacidad
->>>>>>> 2e491054e682e227af983b20754abb1b933a592c
                         </a>
                       </span>
                     </label>
@@ -305,16 +232,11 @@ export default function Register() {
 
                   <div className="text-center mt-6">
                     <button
+                      id='test-button-register'
                       className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
-<<<<<<< HEAD
-                      type="button"
-                    >
-                      Create Account
-=======
                       type="submit"
                     >
                       Crear Cuenta
->>>>>>> 2e491054e682e227af983b20754abb1b933a592c
                     </button>
                   </div>
                 </form>

@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { Bar } from 'react-chartjs-2'
+import { borderWidth, width } from "tailwindcss/defaultTheme";
 
 // components
 
@@ -72,12 +73,22 @@ useEffect(() => {
                       'rgb(255, 205, 86)',
                       'orange',
                       'purple'
-                    ]
+                    ],
+                    borderWidth: 20,
+                    borderColor: 'transparent'
                   },
-                ],
+                
+                ]
               
               }}
-              options={{}}
+              options={{
+                indexAxis: 'y',
+                elements:{
+                  bar:{
+                    borderWidth: 1
+                  }
+                }
+              }}
               
               width={400}
               height={600}

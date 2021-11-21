@@ -3,6 +3,7 @@ import moment from 'moment'
 import TableDropdown from 'components/Dropdowns/TableDropdown.js'
 
 
+
 export default function ListSales({ color }) {
   const [sales, setSales] = useState([]);
   const [clients, setClients] = useState([]);

@@ -6,7 +6,7 @@ export default function CardCreateProduct() {
   const [supplier, setSupplier] = useState({
     name: "",
     lastname: "",
-    phone:""
+    phone: ""
   });
 
   const handleChange = (e) => {
@@ -65,7 +65,7 @@ export default function CardCreateProduct() {
                     type="text"
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     onChange={handleChange}
-                    // defaultValue="Arepas"
+                  // defaultValue="Arepas"
                   />
                 </div>
               </div>
@@ -83,7 +83,7 @@ export default function CardCreateProduct() {
                     type="text"
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     onChange={handleChange}
-                    // defaultValue="Arepas"
+                  // defaultValue="Arepas"
                   />
                 </div>
               </div>
@@ -109,6 +109,7 @@ export default function CardCreateProduct() {
             </div>
 
             <button
+              id='test-button-supplier'
               className="bg-blueGray-700 active:bg-blueGray-600 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
               type="submit"
             >

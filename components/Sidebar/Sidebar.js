@@ -209,9 +209,35 @@ export default function Sidebar() {
                   </a>
                 </Link>
               </li>
+
+              <li className='items-center'>
+                <Link href='/admin/create_client'>
+                  <a
+                    href='#pablo'
+                    className={
+                      'text-xs uppercase py-3 font-bold block ' +
+                      (router.pathname.indexOf('/admin/create_supplier') !== -1
+                        ? 'text-lightBlue-500 hover:text-lightBlue-600'
+                        : 'text-blueGray-700 hover:text-blueGray-500')
+                    }
+                  >
+                    <i
+                      className={
+                        'fas fa-tools mr-2 text-sm ' +
+                        (router.pathname.indexOf('/admin/create_supplier') !==
+                        -1
+                          ? 'opacity-75'
+                          : 'text-blueGray-300')
+                      }
+                    ></i>{' '}
+                    Crear cliente
+                  </a>
+                </Link>
+              </li>
               <li className='items-center'>
                 <Link href='/admin/create_sale'>
                   <a
+                  id='test-sales'
                     href='#pablo'
                     className={
                       'text-xs uppercase py-3 font-bold block ' +
