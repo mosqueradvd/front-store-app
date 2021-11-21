@@ -5,51 +5,48 @@ import React, { useState, useEffect } from "react";
 import CardStats from "components/Cards/CardStats.js";
 
 export default function HeaderStats() {
-  const [clients, setClients] = useState([])
-  const [sales, setSales] = useState([])
-  const [income, setIncome] = useState([])
+  const [clients, setClients] = useState([]);
+  const [sales, setSales] = useState([]);
+  const [income, setIncome] = useState([]);
 
   const get_clients = async () => {
-    const resp = await fetch('http://localhost:4000/client/get-client', {
+    const resp = await fetch("http://localhost:4000/client/get-client", {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('glob_token')}`,
-      },
-    })
-    const data = await resp.json()
-    setClients(data.client)
-    console.log('clients', data.client)
-  }
+        Authorization: `Bearer ${localStorage.getItem("glob_token")}`
+      }
+    });
+    const data = await resp.json();
+    setClients(data.client);
+    console.log("clients", data.client);
+  };
   const getSales = async () => {
-    const resp = await fetch(
-      "http://localhost:4000/api/sales/get-sales",
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("glob_token")}`,
-        },
+    const resp = await fetch("http://localhost:4000/api/sales/get-sales", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("glob_token")}`
       }
-    );
+    });
     const data = await resp.json();
-    console.log('Sales', data.sales)
-    setSales(data.sales)
-  }
+    console.log("Sales", data.sales);
+    setSales(data.sales);
+  };
   const getIncome = async () => {
-    const resp = await fetch(
-      "http://localhost:4000/api/balance/utilities",
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("glob_token")}`,
-        },
+    const resp = await fetch("http://localhost:4000/api/balance/utilities", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("glob_token")}`
       }
-    );
+    });
     const data = await resp.json();
-    setIncome(data.marginGrossIncome)
-  }
+    setIncome(data.marginGrossIncome);
+  };
 
-useEffect(() => {
-  get_clients()
-  getSales()
-  getIncome()
-}, [])
+  useEffect(() => {
+    get_clients();
+    getSales();
+    getIncome();
+  }, []);
+
+  const sales_text = sales && sales.length;
+  const clients_text = clients && clients.length;
   return (
     <>
       {/* Header */}
@@ -61,7 +58,7 @@ useEffect(() => {
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle="CLIENTES"
-                  statTitle={clients.length}
+                  statTitle={clients_text?.toString()}
                   statArrow="up"
                   statPercent="3.48"
                   statPercentColor="text-emerald-500"
@@ -73,7 +70,7 @@ useEffect(() => {
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle="VENTAS"
-                  statTitle={sales.length}
+                  statTitle={sales_text?.toString()}
                   statArrow="down"
                   statPercent="1.10"
                   statPercentColor="text-orange-500"

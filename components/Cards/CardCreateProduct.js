@@ -11,8 +11,8 @@ export default function CardCreateProduct() {
     quantity: "",
     unit_cost: "",
     unit_price: "",
-    expiration_date: "",
-  })
+    expiration_date: ""
+  });
 
   const [image, setImage] = useState();
   const [imageInput, setImageInput] = useState(null);
@@ -22,64 +22,67 @@ export default function CardCreateProduct() {
   const [id, setId] = useState(null);
   const [category, setCategory] = useState({
     category: ""
-  })
+  });
 
-  const handleSelectChange = (e) => {
-    let value = e.target.value
-    console.log('cat', value)
+  const handleSelectChange = e => {
+    let value = e.target.value;
+    console.log("cat", value);
 
-    setId(value)
+    setId(value);
 
     setCategory({
       ...category,
       [e.target.name]: value
-    })
-  }
+    });
+  };
 
-  const handleSupChange = (e) => {
-    let value = e.target.value
-    console.log('supp', value)
-    setSupp(value)
+  const handleSupChange = e => {
+    let value = e.target.value;
+    console.log("supp", value);
+    setSupp(value);
 
     setSupp({
       ...supp,
       [e.target.name]: value
-    })
-  }
+    });
+  };
 
   useEffect(() => {
     const img = document.querySelector("#image");
     setImageInput(img);
 
     get_inventory();
-    get_suppliers()
+    get_suppliers();
   }, []);
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     setInitProduct({
       ...initProduct,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     });
   };
 
   const get_suppliers = async () => {
-    const resp = await fetch("http://localhost:4000/api/supplier/get-supplier", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("glob_token")}`
+    const resp = await fetch(
+      "http://localhost:4000/api/supplier/get-supplier",
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("glob_token")}`
+        }
       }
-    })
-    const data = await resp.json()
-    setSuppliers(data.suppliers)
-    console.log('supps', data)
-  }
+    );
+    const data = await resp.json();
+    setSuppliers(data.suppliers);
+    console.log("supps", data);
+  };
 
-  const imgToS3 = async (e) => {
+  const imgToS3 = async e => {
     e.preventDefault();
 
     const file = imageInput.files[0];
 
     // get secure url from our server
-    const { url } = await fetch("http://localhost:4000/s3Url").then((res) =>
+    const { url } = await fetch("http://localhost:4000/s3Url").then(res =>
       res.json()
     );
 
@@ -89,18 +92,17 @@ export default function CardCreateProduct() {
     await fetch(url, {
       method: "PUT",
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "multipart/form-data"
       },
-      body: file,
+      body: file
     }).then(async () => {
       console.log("set image !!!!", image);
       const imageUrl = url.split("?")[0];
       await create_product(imageUrl);
-     // router.push("/admin/products");
+      // router.push("/admin/products");
     });
 
     // wait for aws response & get the img url
-
 
     // console.log("imageUrl !!!!!", imageUrl);
 
@@ -112,8 +114,8 @@ export default function CardCreateProduct() {
       "http://localhost:4000/api/inventory/get-inventory",
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("glob_token")}`,
-        },
+          Authorization: `Bearer ${localStorage.getItem("glob_token")}`
+        }
       }
     );
     const inven = await resp.json();
@@ -122,7 +124,7 @@ export default function CardCreateProduct() {
     console.log("inven", inven.category);
   };
 
-  const create_product = async (image) => {
+  const create_product = async image => {
     const new_product = { id_category: id, ...initProduct, image };
     console.log("newprod", new_product);
     // await imgToS3();
@@ -131,13 +133,13 @@ export default function CardCreateProduct() {
       .post("http://localhost:4000/products/create-products", new_product, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("glob_token")}`,
-        },
+          Authorization: `Bearer ${localStorage.getItem("glob_token")}`
+        }
       })
-      .then((data) => {
+      .then(data => {
         console.log("data", data);
       })
-      .catch((e) => console.error(e));
+      .catch(e => console.error(e));
   };
 
   return (
@@ -178,8 +180,10 @@ export default function CardCreateProduct() {
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     onChange={handleSelectChange}
                   >
-                    {inventory.map((i, idx) => (
-                        <option key={idx} value={i.id}>{i.name}</option>
+                    {inventory?.map((i, idx) => (
+                      <option key={idx} value={i.id}>
+                        {i.name}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -197,8 +201,10 @@ export default function CardCreateProduct() {
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     onChange={handleSupChange}
                   >
-                    {suppliers.map((i, idx) => (
-                        <option key={idx} value={i.id}>{i.name} {i.lastname}</option>
+                    {suppliers?.map((i, idx) => (
+                      <option key={idx} value={i.id}>
+                        {i.name} {i.lastname}
+                      </option>
                     ))}
                   </select>
                 </div>

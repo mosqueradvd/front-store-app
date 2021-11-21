@@ -1,31 +1,31 @@
-import React, { useEffect, useState } from 'react'
-import { Line } from 'react-chartjs-2'
-import moment from 'moment'
+import React, { useEffect, useState } from "react";
+import { Line } from "react-chartjs-2";
+import moment from "moment";
 
 export default function CardLineChart() {
-  const [sales, setSales] = useState([])
-  let dataSet = []
-  let timing = []
+  const [sales, setSales] = useState([]);
+  let dataSet = [];
+  let timing = [];
   const getSales = async () => {
-    const resp = await fetch('http://localhost:4000/api/sales/get-sales', {
+    const resp = await fetch("http://localhost:4000/api/sales/get-sales", {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('glob_token')}`,
-      },
-    })
-    const data = await resp.json()
-    console.log('Sales', data.sales)
-    setSales(data.sales)
-  }
-  console.log(dataSet)
-  sales.map((index) =>
+        Authorization: `Bearer ${localStorage.getItem("glob_token")}`
+      }
+    });
+    const data = await resp.json();
+    console.log("Sales", data.sales);
+    setSales(data.sales);
+  };
+  console.log(dataSet);
+  sales?.map(index =>
     dataSet.push({
-      t: moment(index.date_sale).format('DD-MMM'),
-      y: index.total_sale,
+      t: moment(index.date_sale).format("DD-MMM"),
+      y: index.total_sale
     })
-  )
-  sales.map((index) => timing.push(moment(index.date_sale).format('DD-MMM')))
+  );
+  sales?.map(index => timing.push(moment(index.date_sale).format("DD-MMM")));
   React.useEffect(() => {
-    getSales()
+    getSales();
     /* var config = {
       type: 'line',
       data: {
@@ -113,29 +113,29 @@ export default function CardLineChart() {
     }
     var ctx = document.getElementById('line-chart').getContext('2d')
     window.myLine = new Chart(ctx, config) */
-  }, [])
+  }, []);
   return (
     <>
-      <div className='relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700'>
-        <div className='rounded-t mb-0 px-4 py-3 bg-transparent'>
-          <div className='flex flex-wrap items-center'>
-            <div className='relative w-full max-w-full flex-grow flex-1'>
-              <h6 className='uppercase text-blueGray-100 mb-1 text-xs font-semibold'>
+      <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700">
+        <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
+          <div className="flex flex-wrap items-center">
+            <div className="relative w-full max-w-full flex-grow flex-1">
+              <h6 className="uppercase text-blueGray-100 mb-1 text-xs font-semibold">
                 Vista general
               </h6>
-              <h2 className='text-white text-xl font-semibold'>
+              <h2 className="text-white text-xl font-semibold">
                 Valor de las ventas
               </h2>
             </div>
           </div>
         </div>
-        <div className='p-4 flex-auto'>
+        <div className="p-4 flex-auto">
           {/* Chart */}
-          <div className='relative h-350-px'>
-            <canvas id='line-chart'></canvas>
+          <div className="relative h-350-px">
+            <canvas id="line-chart"></canvas>
           </div>
         </div>
       </div>
     </>
-  )
+  );
 }
