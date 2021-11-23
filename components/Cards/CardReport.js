@@ -2,17 +2,42 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import ModalFooter from '@material-tailwind/react/ModalFooter'
 import Button from '@material-tailwind/react/Button'
-
+import Swal from 'sweetalert2'
 export default function CardReport() {
-  const generate_report = async (e) => {
-    const resp = await fetch('http://localhost:4000/api/report/get-report', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('glob_token')}`,
-      },
+  const showAlertSuccess = () => {
+    Swal.fire({
+      title: 'Reporte generado.',
+      text: 'En la ruta de documentos',
+      icon: 'success',
+      button: 'Aceptar',
     })
+  }
 
-    console.log('report', resp)
-    window.open(resp, '_blank')
+  const showAlertWarning = () => {
+    Swal.fire({
+      title: 'No se genero el reporte',
+      text: 'Revisar.',
+      icon: 'warning',
+      button: 'Aceptar',
+    })
+  }
+  const generate_report = async (e) => {
+    e.preventDefault()
+    await axios
+      .get('http://localhost:4000/api/report/get-report', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('glob_token')}`,
+        },
+      })
+      .then(async (response) => {
+        console.log('data', response)
+        await showAlertSuccess()
+      })
+      .catch(async (e) => {
+        //console.error(e)
+        await showAlertWarning()
+      })
   }
 
   return (

@@ -7,13 +7,15 @@ export default function CardBarChart() {
   let dataSet = []
   let names = []
 
-
   const getProducts = async () => {
-    const resp = await fetch('http://localhost:4000/api/products/most-seller-products', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('glob_token')}`,
-      },
-    })
+    const resp = await fetch(
+      'http://localhost:4000/api/products/most-seller-products',
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('glob_token')}`,
+        },
+      }
+    )
     const data = await resp.json()
     console.log('Sales', data.products)
     setProducts(data.products)
@@ -127,15 +129,15 @@ export default function CardBarChart() {
                 labels: names,
                 datasets: [
                   {
-                    label: 'Productos',
+                    label: 'Total venta',
                     data: dataSet,
                     backgroundColor: [
                       'rgb(255, 99, 132)',
                       'rgb(54, 162, 235)',
                       'rgb(255, 205, 86)',
                       'orange',
-                      'purple'
-                    ]
+                      'purple',
+                    ],
                   },
                 ],
               }}
