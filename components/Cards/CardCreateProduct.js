@@ -96,7 +96,7 @@ export default function CardCreateProduct() {
       console.log("set image !!!!", image);
       const imageUrl = url.split("?")[0];
       await create_product(imageUrl);
-     // router.push("/admin/products");
+      // router.push("/admin/products");
     });
 
     // wait for aws response & get the img url
@@ -179,7 +179,7 @@ export default function CardCreateProduct() {
                     onChange={handleSelectChange}
                   >
                     {inventory.map((i, idx) => (
-                        <option key={idx} value={i.id}>{i.name}</option>
+                      <option key={idx} value={i.id}>{i.name}</option>
                     ))}
                   </select>
                 </div>
@@ -198,7 +198,7 @@ export default function CardCreateProduct() {
                     onChange={handleSupChange}
                   >
                     {suppliers.map((i, idx) => (
-                        <option key={idx} value={i.id}>{i.name} {i.lastname}</option>
+                      <option key={idx} value={i.id}>{i.name} {i.lastname}</option>
                     ))}
                   </select>
                 </div>
@@ -311,6 +311,7 @@ export default function CardCreateProduct() {
             </div>
 
             <button
+              id='button-test-product'
               className="bg-blueGray-700 active:bg-blueGray-600 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
               type="submit"
             >

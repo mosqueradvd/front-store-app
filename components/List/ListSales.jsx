@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import moment from 'moment'
 import TableDropdown from 'components/Dropdowns/TableDropdown.js'
-import Pagination from '@material-tailwind/react/Pagination'
-import PaginationItem from '@material-tailwind/react/PaginationItem'
-import Icon from '@material-tailwind/react/Icon'
+
+
+
 export default function ListSales({ color }) {
   const [sales, setSales] = useState([])
 
