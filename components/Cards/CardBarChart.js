@@ -20,8 +20,8 @@ export default function CardBarChart() {
     console.log("Sales", data.products);
     setProducts(data.products);
   };
-  products.map(index => dataSet.push(index.total));
-  products.map(index => names.push(index.name));
+  products?.map(index => dataSet.push(index.total));
+  products?.map(index => names.push(index.name));
 
   console.log("totales", dataSet);
   useEffect(() => {

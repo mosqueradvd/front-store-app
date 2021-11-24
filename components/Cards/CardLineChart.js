@@ -20,6 +20,7 @@ export default function CardLineChart() {
     console.log("Sales", data.sales);
     setSales(data.sales);
   };
+
   const getDebts = async () => {
     const resp = await fetch("http://localhost:4000/api/sales/acc-debts", {
       headers: {
@@ -31,9 +32,10 @@ export default function CardLineChart() {
     setDebts(data.sales);
   };
 
-  sales.map(index => dataSet.push(index.total));
-  debts.map(index => dataSetDebt.push(index.total));
-  sales.map(index => timing.push(moment(index.Fecha_cierre).format("MMMM")));
+  sales?.map(index => dataSet.push(index.total));
+  debts?.map(index => dataSetDebt.push(index.total));
+  sales?.map(index => timing.push(moment(index.Fecha_cierre).format("MMMM")));
+
   React.useEffect(() => {
     getSales();
     getDebts();

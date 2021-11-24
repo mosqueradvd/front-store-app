@@ -61,6 +61,17 @@ export default function HeaderStats() {
     setIncome(data.marginGrossIncome);
   };
 
+  const getSales = async () => {
+    const resp = await fetch("http://localhost:4000/api/sales/acc-sales", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("glob_token")}`
+      }
+    });
+    const data = await resp.json();
+    console.log("Sales", data.sales);
+    setSales(data.sales);
+  };
+
   useEffect(() => {
     get_clients();
     getSales();
@@ -84,7 +95,7 @@ export default function HeaderStats() {
               <div className="w-4 lg:w-6/11 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle="CLIENTES"
-                  statTitle={clients_text?.toString()}
+                  // statTitle={clients_text?.toString()}
                   statArrow="up"
                   statPercent="3.48"
                   statPercentColor="text-emerald-500"
