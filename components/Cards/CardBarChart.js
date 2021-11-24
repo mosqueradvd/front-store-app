@@ -129,7 +129,7 @@ export default function CardBarChart() {
                 labels: names,
                 datasets: [
                   {
-                    label: "Productos",
+                    label: "Total venta",
                     data: dataSet,
                     backgroundColor: [
                       "rgb(255, 99, 132)",

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
+import Swal from "sweetalert2";
 
 // components
 export default function CardCreateProduct() {
@@ -13,7 +14,23 @@ export default function CardCreateProduct() {
     unit_price: "",
     expiration_date: ""
   });
+  const showAlertSuccess = () => {
+    Swal.fire({
+      title: "Producto Registrado.",
+      text: "El producto ha sido registrado correctamente.",
+      icon: "success",
+      button: "Aceptar"
+    });
+  };
 
+  const showAlertWarning = () => {
+    Swal.fire({
+      title: "Algo salio mal",
+      text: "El producto no pudo ser registrado en la tienda.",
+      icon: "warning",
+      button: "Aceptar"
+    });
+  };
   const [image, setImage] = useState();
   const [imageInput, setImageInput] = useState(null);
   const [inventory, setInventory] = useState([]);
@@ -125,9 +142,12 @@ export default function CardCreateProduct() {
   };
 
   const create_product = async image => {
+    //  e.preventDefault()
+
     const new_product = { id_category: id, ...initProduct, image };
     console.log("newprod", new_product);
     // await imgToS3();
+    let form = document.getElementById("form");
 
     await axios
       .post("http://localhost:4000/products/create-products", new_product, {
@@ -136,10 +156,18 @@ export default function CardCreateProduct() {
           Authorization: `Bearer ${localStorage.getItem("glob_token")}`
         }
       })
-      .then(data => {
+      .then(async data => {
         console.log("data", data);
+
+        await showAlertSuccess();
+        form.reset();
       })
-      .catch(e => console.error(e));
+      .catch(async e => {
+        await showAlertSuccess();
+        // form.reset()
+
+        console.error(e);
+      });
   };
 
   return (
@@ -180,7 +208,8 @@ export default function CardCreateProduct() {
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     onChange={handleSelectChange}
                   >
-                    {inventory?.map((i, idx) => (
+                    <option>Seleccione</option>
+                    {inventory.map((i, idx) => (
                       <option key={idx} value={i.id}>
                         {i.name}
                       </option>
@@ -201,7 +230,8 @@ export default function CardCreateProduct() {
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     onChange={handleSupChange}
                   >
-                    {suppliers?.map((i, idx) => (
+                    <option>Seleccione</option>
+                    {suppliers.map((i, idx) => (
                       <option key={idx} value={i.id}>
                         {i.name} {i.lastname}
                       </option>
@@ -317,6 +347,7 @@ export default function CardCreateProduct() {
             </div>
 
             <button
+              id="button-test-product"
               className="bg-blueGray-700 active:bg-blueGray-600 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
               type="submit"
             >

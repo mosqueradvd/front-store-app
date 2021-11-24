@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
-import Button from "@material-tailwind/react/Button";
-import axios from "axios";
-import { useRouter } from "next/router";
-import Toggle from "./Toggle";
-import Checkbox from "@material-tailwind/react/Checkbox";
-import Modal from "@material-tailwind/react/Modal";
-import ModalHeader from "@material-tailwind/react/ModalHeader";
-import ModalBody from "@material-tailwind/react/ModalBody";
-import ModalFooter from "@material-tailwind/react/ModalFooter";
-import moment from "moment";
-import TableDropdown from "components/Dropdowns/TableDropdown.js";
-import Icon from "@material-tailwind/react/Icon";
-import Swal from "sweetalert2";
-import Radio from "@material-tailwind/react/Radio";
+import React, { useState, useEffect } from 'react'
+import Button from '@material-tailwind/react/Button'
+import axios from 'axios'
+import { useRouter } from 'next/router'
+import Toggle from './Toggle'
+import Checkbox from '@material-tailwind/react/Checkbox'
+import Modal from '@material-tailwind/react/Modal'
+import ModalHeader from '@material-tailwind/react/ModalHeader'
+import ModalBody from '@material-tailwind/react/ModalBody'
+import ModalFooter from '@material-tailwind/react/ModalFooter'
+import moment from 'moment'
+import TableDropdown from 'components/Dropdowns/TableDropdown.js'
+import Icon from '@material-tailwind/react/Icon'
+import Swal from 'sweetalert2'
+import Radio from '@material-tailwind/react/Radio'
 
 export default function CardCreateSale() {
   let arr = [];
@@ -581,7 +581,7 @@ export default function CardCreateSale() {
               type="submit"
               onClick={e => setShowModal(true)}
             >
-              Agregar producto
+              Crear Venta
             </Button>
           </form>
           <form>
@@ -644,7 +644,7 @@ export default function CardCreateSale() {
                     onClick={create_sale_product}
                     ripple="light"
                   >
-                    Venta
+                    Agregar producto
                   </Button>
                 ) : (
                   <Button

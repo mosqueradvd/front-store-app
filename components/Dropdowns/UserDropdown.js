@@ -1,10 +1,12 @@
 import React from "react";
 import { createPopper } from "@popperjs/core";
+import { useRouter } from 'next/router'
 
 const UserDropdown = () => {
-  // dropdown props
+  const router = useRouter()
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
   const btnDropdownRef = React.createRef();
+  // dropdown props
   const popoverDropdownRef = React.createRef();
   const openDropdownPopover = () => {
     createPopper(btnDropdownRef.current, popoverDropdownRef.current, {
@@ -15,6 +17,14 @@ const UserDropdown = () => {
   const closeDropdownPopover = () => {
     setDropdownPopoverShow(false);
   };
+  const logout = () =>{
+    localStorage.removeItem('glob_token')
+    setTimeout(() => {
+      router.push('/auth/login')
+      
+    }, 1000);
+    
+  }  
   return (
     <>
       <a
@@ -76,9 +86,9 @@ const UserDropdown = () => {
           className={
             "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
           }
-          onClick={(e) => e.preventDefault()}
+          onClick={logout}
         >
-          Seprated link
+          Cerrar Sesión
         </a>
       </div>
     </>
