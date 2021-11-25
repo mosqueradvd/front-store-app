@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 // components
 
 import CardStats from "components/Cards/CardStats.js";
+import Admin from "layouts/Admin";
 
 export default function HeaderStats() {
   const [clients, setClients] = useState([]);
