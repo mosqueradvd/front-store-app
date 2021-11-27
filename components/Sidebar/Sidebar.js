@@ -113,7 +113,7 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className='items-center'>
+              {/*   <li className='items-center'>
                 <Link href='/admin/settings'>
                   <a
                     href='#pablo'
@@ -135,7 +135,7 @@ export default function Sidebar() {
                     Settings
                   </a>
                 </Link>
-              </li>
+              </li> */}
 
               <li className='items-center'>
                 <Link href='/admin/create_product' as='/admin/create_product'>
@@ -237,7 +237,7 @@ export default function Sidebar() {
               <li className='items-center'>
                 <Link href='/admin/create_sale'>
                   <a
-                  id='test-sales'
+                    id='test-sales'
                     href='#pablo'
                     className={
                       'text-xs uppercase py-3 font-bold block ' +
@@ -258,7 +258,7 @@ export default function Sidebar() {
                   </a>
                 </Link>
               </li>
-              <li className='items-center'>
+              {/*  <li className='items-center'>
                 <Link href='/admin/tables'>
                   <a
                     href='#pablo'
@@ -280,7 +280,7 @@ export default function Sidebar() {
                     Tables
                   </a>
                 </Link>
-              </li>
+              </li> */}
             </ul>
 
             {/* Divider */}

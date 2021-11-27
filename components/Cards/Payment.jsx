@@ -152,7 +152,7 @@ function Payment() {
               className='bg-blueGray-700 active:bg-blueGray-600 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150'
               type='submit'
             >
-              Crear venta
+              Abonar
             </button>
           </form>
         </div>
