@@ -3,7 +3,7 @@ import Admin from 'layouts/Admin.js'
 
 import Product from 'layouts/Product.js'
 import CardReport from 'components/Cards/CardReport'
-
+import Admin from 'layouts/Admin.js'
 export default function Report() {
   return (
     <>
@@ -16,4 +16,4 @@ export default function Report() {
   )
 }
 
-Report.layout = Product
+Report.layout = Admin

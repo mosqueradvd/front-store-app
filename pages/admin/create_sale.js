@@ -6,7 +6,7 @@ import CardCreateSale from 'components/Cards/CardCreateSale'
 
 // layout for page
 
-import Product from 'layouts/Product.js'
+import Admin from 'layouts/Admin.js'
 
 export default function Settings() {
   return (
@@ -20,4 +20,4 @@ export default function Settings() {
   )
 }
 
-Settings.layout = Product
+Settings.layout = Admin
