@@ -28,10 +28,7 @@ export default function Sidebar() {
           </button>
           {/* Brand */}
           <Link href='/'>
-            <a
-              href='#pablo'
-              className='md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0'
-            >
+            <a className='md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0'>
               Mi Tienda
             </a>
           </Link>
@@ -56,20 +53,14 @@ export default function Sidebar() {
               <div className='flex flex-wrap'>
                 <div className='w-6/12'>
                   <Link href='/'>
-                    <a
-                      href='#pablo'
-                      className='md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0'
-                    >
+                    <a className='md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0'>
                       Mi Tienda
                     </a>
                   </Link>
                 </div>
                 <div className='w-6/12'>
                   <Link href='/'>
-                    <a
-                      href='#pablo'
-                      className='md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0'
-                    >
+                    <a className='md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0'>
                       Mi Tienda
                     </a>
                   </Link>
@@ -107,7 +98,6 @@ export default function Sidebar() {
               <li className='items-center'>
                 <Link href='/admin/dashboard'>
                   <a
-                    href='#pablo'
                     className={
                       'text-xs uppercase py-3 font-bold block ' +
                       (router.pathname.indexOf('/admin/dashboard') !== -1
@@ -131,7 +121,7 @@ export default function Sidebar() {
               {/*  <li className='items-center'>
                 <Link href='/admin/tables'>
                   <a
-                    href='#pablo'
+                   
                     className={
                       'text-xs uppercase py-3 font-bold block ' +
                       (router.pathname.indexOf('/admin/tables') !== -1
@@ -157,19 +147,38 @@ export default function Sidebar() {
             <hr className='my-4 md:min-w-full' />
             {/* Heading */}
             <h6 className='md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline'>
-              Administrar Productos
+              Administrar Inventario
             </h6>
             {/* Navigation */}
 
             <ul className='md:flex-col md:min-w-full flex flex-col list-none'>
-              <li>
-                <ProductDropdown />
+              <li className='items-center'>
+                <Link href='/admin/products'>
+                  <a
+                    className={
+                      'text-xs uppercase py-3 font-bold block ' +
+                      (router.pathname.indexOf('/admin/tables') !== -1
+                        ? 'text-lightBlue-500 hover:text-lightBlue-600'
+                        : 'text-blueGray-700 hover:text-blueGray-500')
+                    }
+                  >
+                    <i
+                      className={
+                        'fas fa-table mr-2 text-sm ' +
+                        (router.pathname.indexOf('/admin/tables') !== -1
+                          ? 'opacity-75'
+                          : 'text-blueGray-300')
+                      }
+                    ></i>{' '}
+                    Inventario
+                  </a>
+                </Link>
               </li>
 
               {/*   <li className='items-center'>
                 <Link href='/admin/settings'>
                   <a
-                    href='#pablo'
+                   
                     className={
                       'text-xs uppercase py-3 font-bold block ' +
                       (router.pathname.indexOf('/admin/settings') !== -1
@@ -193,7 +202,7 @@ export default function Sidebar() {
               {/*  <li className='items-center'>
                 <Link href='/admin/tables'>
                   <a
-                    href='#pablo'
+                   
                     className={
                       'text-xs uppercase py-3 font-bold block ' +
                       (router.pathname.indexOf('/admin/tables') !== -1
@@ -224,9 +233,28 @@ export default function Sidebar() {
             {/* Navigation */}
 
             <ul className='md:flex-col md:min-w-full flex flex-col list-none md:mb-4'>
-              <li className='items-center'></li>
-
-              <ClientDropdown />
+              <li className='items-center'>
+                <Link href='/admin/clients'>
+                  <a
+                    className={
+                      'text-xs uppercase py-3 font-bold block ' +
+                      (router.pathname.indexOf('/admin/tables') !== -1
+                        ? 'text-lightBlue-500 hover:text-lightBlue-600'
+                        : 'text-blueGray-700 hover:text-blueGray-500')
+                    }
+                  >
+                    <i
+                      className={
+                        'fas fa-table mr-2 text-sm ' +
+                        (router.pathname.indexOf('/admin/tables') !== -1
+                          ? 'opacity-75'
+                          : 'text-blueGray-300')
+                      }
+                    ></i>{' '}
+                    Clientes
+                  </a>
+                </Link>
+              </li>
             </ul>
             {/* Divider */}
             <hr className='my-4 md:min-w-full' />
@@ -237,9 +265,29 @@ export default function Sidebar() {
             {/* Navigation */}
 
             <ul className='md:flex-col md:min-w-full flex flex-col list-none md:mb-4'>
-              <li className='items-center'></li>
-
-              <SupplierDropdown />
+              <li className='items-center'>
+                {' '}
+                <Link href='/admin/supplier'>
+                  <a
+                    className={
+                      'text-xs uppercase py-3 font-bold block ' +
+                      (router.pathname.indexOf('/admin/tables') !== -1
+                        ? 'text-lightBlue-500 hover:text-lightBlue-600'
+                        : 'text-blueGray-700 hover:text-blueGray-500')
+                    }
+                  >
+                    <i
+                      className={
+                        'fas fa-table mr-2 text-sm ' +
+                        (router.pathname.indexOf('/admin/tables') !== -1
+                          ? 'opacity-75'
+                          : 'text-blueGray-300')
+                      }
+                    ></i>{' '}
+                    Proveedores
+                  </a>
+                </Link>
+              </li>
             </ul>
 
             {/* Divider */}
@@ -252,7 +300,48 @@ export default function Sidebar() {
 
             <ul className='md:flex-col md:min-w-full flex flex-col list-none md:mb-4'>
               <li>
-                <SellsDropdown />
+                <Link href='/admin/sales'>
+                  <a
+                    className={
+                      'text-xs uppercase py-3 font-bold block ' +
+                      (router.pathname.indexOf('/admin/tables') !== -1
+                        ? 'text-lightBlue-500 hover:text-lightBlue-600'
+                        : 'text-blueGray-700 hover:text-blueGray-500')
+                    }
+                  >
+                    <i
+                      className={
+                        'fas fa-table mr-2 text-sm ' +
+                        (router.pathname.indexOf('/admin/tables') !== -1
+                          ? 'opacity-75'
+                          : 'text-blueGray-300')
+                      }
+                    ></i>{' '}
+                    Ventas
+                  </a>
+                </Link>
+              </li>
+              <li>
+                <Link href='/admin/debts'>
+                  <a
+                    className={
+                      'text-xs uppercase py-3 font-bold block ' +
+                      (router.pathname.indexOf('/admin/tables') !== -1
+                        ? 'text-lightBlue-500 hover:text-lightBlue-600'
+                        : 'text-blueGray-700 hover:text-blueGray-500')
+                    }
+                  >
+                    <i
+                      className={
+                        'fas fa-table mr-2 text-sm ' +
+                        (router.pathname.indexOf('/admin/tables') !== -1
+                          ? 'opacity-75'
+                          : 'text-blueGray-300')
+                      }
+                    ></i>{' '}
+                    Cuentas por cobrar
+                  </a>
+                </Link>
               </li>
             </ul>
 
@@ -267,7 +356,6 @@ export default function Sidebar() {
               <li className='items-center'>
                 <Link href='/admin/report'>
                   <a
-                    href='#pablo'
                     className={
                       'text-xs uppercase py-3 font-bold block ' +
                       (router.pathname.indexOf('/admin/tables') !== -1

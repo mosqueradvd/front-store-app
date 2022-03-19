@@ -63,7 +63,7 @@ const ProductDropdown = () => {
                 : 'text-blueGray-300')
             }
           ></i>{' '}
-          Producto
+          Productos
         </a>
       </a>
       <div
@@ -109,7 +109,7 @@ const ProductDropdown = () => {
               }
               onClick={crearProducto}
             >
-              Crear Producto
+              Crear Productos
             </a>
           </li>
           <li>
@@ -121,7 +121,7 @@ const ProductDropdown = () => {
               }
               onClick={consultaProducto}
             >
-              Consultar Producto
+              Consultar Productos
             </a>
           </li>
           <li>
@@ -133,7 +133,7 @@ const ProductDropdown = () => {
               }
               onClick={crearCategoria}
             >
-              Crear Categoria
+              Crear Categorias
             </a>
           </li>
         </ui>
