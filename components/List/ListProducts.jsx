@@ -17,6 +17,7 @@ import Dropdown from '@material-tailwind/react/Dropdown'
 import DropdownItem from '@material-tailwind/react/DropdownItem'
 import DropdownLink from '@material-tailwind/react/DropdownLink'
 import SelectSearch from 'react-select-search'
+import { filter } from 'next-pwa/cache'
 const ListProducts = ({ color }) => {
   const router = useRouter()
   const [options, setOptions] = useState([])
@@ -26,6 +27,7 @@ const ListProducts = ({ color }) => {
   const [unit_cost, setUnit_cost] = useState({
     unit_cost: '',
   })
+  const [filterCategory, setFilterCategory] = useState([])
   const [unit_price, setUnit_price] = useState({
     unit_price: '',
   })
@@ -51,12 +53,18 @@ const ListProducts = ({ color }) => {
     })
   }
   const handleOption = (e) => {
-    let value = e.target.value
-    setCategory({
-      ...category,
+    let value = e.currentTarget.value
+
+    setFilterCategory(value)
+
+    setFilterCategory({
+      ...filterCategory,
       [e.target.name]: value,
     })
+
+    console.log('catEE', filterCategory)
   }
+
   const handleExpiration_date = (e) => {
     let value = e.target.value
     setExpiration_date({
@@ -247,6 +255,20 @@ const ListProducts = ({ color }) => {
             margin: '1em',
           }}
         >
+          <div>
+            {/* <form action=""> */}
+              <select name="" id="" onChange={handleOption}>
+                <option value=''>all</option>
+              {
+                category?.map((i, id) => (
+                  <>
+                  <option value={i.name} key={id}>{i.name}</option>
+                  </>
+                ))
+              }
+              </select>
+            {/* </form> */}
+          </div>
           <select value={category}>
             {category.map((fbb) => (
               <option key={fbb} value={fbb}>
