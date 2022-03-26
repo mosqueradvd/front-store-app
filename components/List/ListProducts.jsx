@@ -17,7 +17,8 @@ import Dropdown from '@material-tailwind/react/Dropdown'
 import DropdownItem from '@material-tailwind/react/DropdownItem'
 import DropdownLink from '@material-tailwind/react/DropdownLink'
 import SelectSearch from 'react-select-search'
-import { filter } from 'next-pwa/cache'
+import { filter, values } from 'next-pwa/cache'
+import FilteredProducts from '../components/FilteredProducts'
 const ListProducts = ({ color }) => {
   const router = useRouter()
   const [options, setOptions] = useState([])
@@ -44,6 +45,8 @@ const ListProducts = ({ color }) => {
     quantity: '',
   })
 
+  const [searchItem, setSearchItem] = useState('')
+
   let arr = []
   const handleQuantityChange = (e) => {
     let value = e.target.value
@@ -52,18 +55,17 @@ const ListProducts = ({ color }) => {
       [e.target.name]: value,
     })
   }
-  const handleOption = (e) => {
+  const handleOption = async (e) => {
     let value = e.currentTarget.value
-
+    console.log(value)
     setFilterCategory(value)
 
     setFilterCategory({
       ...filterCategory,
       [e.target.name]: value,
     })
-
-    console.log('catEE', filterCategory)
   }
+  const handleSearch = (e) => setSearchItem(e.target.value)
 
   const handleExpiration_date = (e) => {
     let value = e.target.value
@@ -84,22 +86,11 @@ const ListProducts = ({ color }) => {
 
   const handleUnitnameChange = (id, e) => {
     console.log('el id', id)
-    //console.log('ele', e.target.value)
 
-    //product/id
-
-    //objecto = reponse
-    //setProducto(objeto)
-
-    /*producto = {
-      name: objeto.name,
-      valor: obj.name
-    }*/
 
     let myId = prods.filter((prod) => prod.id === id)
     console.log('myId', myId)
 
-    //  defaultValue = producto.name
     let value = e.target.value
     setUnit_name({
       ...name,
@@ -167,10 +158,9 @@ const ListProducts = ({ color }) => {
 
     for (let index = 0; index < inven.products.length; index++) {
       for (let j = 0; j < inven.products[index].length; j++) {
-        /* console.log(inven.products[index][j], 'i-->', index, 'j-->', j) */
         const element = inven.products[index][j]
-
         arr.push(element)
+
       }
     }
     setProds(arr)
@@ -223,9 +213,9 @@ const ListProducts = ({ color }) => {
     await get_inventory()
   }
 
-  useEffect(async () => {
+  useEffect(() => {
     get_inventory()
-    await get_dataInventory()
+
   }, [])
 
   return (
@@ -256,27 +246,23 @@ const ListProducts = ({ color }) => {
           }}
         >
           <div>
+            <input placeholder='Buscar Producto...' type="text" name="" id="" onChange={handleSearch} />
+          </div>
+          <div>
             {/* <form action=""> */}
-              <select name="" id="" onChange={handleOption}>
-                <option value=''>all</option>
+            <select name="category" id="category" type='select' onChange={handleOption}>
+              <option value=''>Todas las categorias</option>
               {
                 category?.map((i, id) => (
-                  <>
-                  <option value={i.name} key={id}>{i.name}</option>
-                  </>
+
+                  <option value={i.id} key={id}>{i.name}</option>
+
                 ))
               }
-              </select>
-            {/* </form> */}
+            </select>
+
           </div>
-          <select value={category}>
-            {category.map((fbb) => (
-              <option key={fbb} value={fbb}>
-                {fbb.name}
-              </option>
-            ))}
-            ;
-          </select>
+       
           <Button
             color='green'
             type='submit'
@@ -313,44 +299,84 @@ const ListProducts = ({ color }) => {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: '1fr 1fr 1fr 1fr',
+            gridTemplateColumns: 'repeat(6, 1fr)',
           }}
         >
-          {prods.map((prod) => (
-            <div
-              style={{
-                borderRadius: '6px',
+          {
+            filterCategory.category == '' ||  filterCategory.category == null
+              ? (
+                prods.map((product, index) => (
+                  <div
+                    style={{
+                      borderRadius: '6px',
+                      boxShadow: '0px 2px 4px rgba(0,0,0,0.4)',
+                      padding: '1em',
+                      margin: '1em',
+                    }}
+                    key={index}
+                  >
+                    <div>
+                      <img
+                        src={product.image}
+                        height='40px'
+                      />
+                    </div>
+                    <div className='content'>
+                      <p>{product.name}</p>
+                      <p>{product.stock} Disponibles</p>
+                      <p>{product.unit_price} $</p>
+                    </div>
+                  </div>
+                ))): (
+                  <FilteredProducts products={prods} filter={filterCategory}/>
+                )
+          }
 
-                boxShadow: '0px 2px 4px rgba(0,0,0,0.4)',
-                padding: '1em',
-                margin: '1em',
-              }}
-            >
-              <div>
-                <img
-                  src={prod.image}
-                  /* className='bg-white rounded-md border'
-                  alt='...'
-                  width='100'
-                  */
-                  // objectFit='cover'
-                  height='40px'
-                />
-              </div>
-              <div className='content'>
-                <p>{prod.name}</p>
-                <p>{prod.stock} Disponibles</p>
-                <p>{prod.unit_price} $</p>
-              </div>
-            </div>
-          ))}
-
-          {/* Projects table */}
         </div>
       </div>
     </>
   )
 }
+
+/**
+ * 
+ *   <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(6, 1fr)',
+          }}
+        >
+          {
+            prods?.filter((prod => filterCategory.category == prod.id_category)).map(
+              (filtered, index) => (
+                <div
+                  style={{
+                    borderRadius: '6px',
+
+                    boxShadow: '0px 2px 4px rgba(0,0,0,0.4)',
+                    padding: '1em',
+                    margin: '1em',
+                  }}
+                  key={index}
+                >
+                  <div>
+                    <img
+                      src={filtered.image}
+                      height='40px'
+                    />
+                  </div>
+                  <div className='content'>
+                    <p>{filtered.name}</p>
+                    <p>{filtered.stock} Disponibles</p>
+                    <p>{filtered.unit_price} $</p>
+                  </div>
+                </div>
+              )
+            )
+          }
+
+        </div>
+ */
 
 /**
  * return (
