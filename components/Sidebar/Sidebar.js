@@ -1,13 +1,19 @@
 import React from 'react'
+
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import NotificationDropdown from 'components/Dropdowns/NotificationDropdown.js'
 import UserDropdown from 'components/Dropdowns/UserDropdown.js'
+import ProductDropdown from 'components/Dropdowns/ProductDropdown.js'
+import SellsDropdown from 'components/Dropdowns/SellsDropdown.js'
+import SupplierDropdown from 'components/Dropdowns/SupplierDropdown.js'
+import ClientDropdown from 'components/Dropdowns/ClientDropdown.js'
 
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = React.useState('hidden')
   const router = useRouter()
+
   return (
     <>
       <nav className='md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6'>
@@ -22,10 +28,7 @@ export default function Sidebar() {
           </button>
           {/* Brand */}
           <Link href='/'>
-            <a
-              href='#pablo'
-              className='md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0'
-            >
+            <a className='md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0'>
               Mi Tienda
             </a>
           </Link>
@@ -50,10 +53,14 @@ export default function Sidebar() {
               <div className='flex flex-wrap'>
                 <div className='w-6/12'>
                   <Link href='/'>
-                    <a
-                      href='#pablo'
-                      className='md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0'
-                    >
+                    <a className='md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0'>
+                      Mi Tienda
+                    </a>
+                  </Link>
+                </div>
+                <div className='w-6/12'>
+                  <Link href='/'>
+                    <a className='md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0'>
                       Mi Tienda
                     </a>
                   </Link>
@@ -79,12 +86,11 @@ export default function Sidebar() {
                 />
               </div>
             </form>
-
             {/* Divider */}
             <hr className='my-4 md:min-w-full' />
             {/* Heading */}
             <h6 className='md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline'>
-              Administrar
+              General
             </h6>
             {/* Navigation */}
 
@@ -92,7 +98,6 @@ export default function Sidebar() {
               <li className='items-center'>
                 <Link href='/admin/dashboard'>
                   <a
-                    href='#pablo'
                     className={
                       'text-xs uppercase py-3 font-bold block ' +
                       (router.pathname.indexOf('/admin/dashboard') !== -1
@@ -113,155 +118,10 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className='items-center'>
-                <Link href='/admin/settings'>
-                  <a
-                    href='#pablo'
-                    className={
-                      'text-xs uppercase py-3 font-bold block ' +
-                      (router.pathname.indexOf('/admin/settings') !== -1
-                        ? 'text-lightBlue-500 hover:text-lightBlue-600'
-                        : 'text-blueGray-700 hover:text-blueGray-500')
-                    }
-                  >
-                    <i
-                      className={
-                        'fas fa-tools mr-2 text-sm ' +
-                        (router.pathname.indexOf('/admin/settings') !== -1
-                          ? 'opacity-75'
-                          : 'text-blueGray-300')
-                      }
-                    ></i>{' '}
-                    Settings
-                  </a>
-                </Link>
-              </li>
-
-              <li className='items-center'>
-                <Link href='/admin/create_product' as='/admin/create_product'>
-                  <a
-                    href='#pablo'
-                    className={
-                      'text-xs uppercase py-3 font-bold block ' +
-                      (router.pathname.indexOf('/admin/create_product') !== -1
-                        ? 'text-lightBlue-500 hover:text-lightBlue-600'
-                        : 'text-blueGray-700 hover:text-blueGray-500')
-                    }
-                  >
-                    <i
-                      className={
-                        'fas fa-tools mr-2 text-sm ' +
-                        (router.pathname.indexOf('/admin/create_product') !== -1
-                          ? 'opacity-75'
-                          : 'text-blueGray-300')
-                      }
-                    ></i>{' '}
-                    Crear producto
-                  </a>
-                </Link>
-              </li>
-
-              <li className='items-center'>
-                <Link href='/admin/create_cat'>
-                  <a
-                    href='#pablo'
-                    className={
-                      'text-xs uppercase py-3 font-bold block ' +
-                      (router.pathname.indexOf('/admin/create_cat') !== -1
-                        ? 'text-lightBlue-500 hover:text-lightBlue-600'
-                        : 'text-blueGray-700 hover:text-blueGray-500')
-                    }
-                  >
-                    <i
-                      className={
-                        'fas fa-tools mr-2 text-sm ' +
-                        (router.pathname.indexOf('/admin/create_cat') !== -1
-                          ? 'opacity-75'
-                          : 'text-blueGray-300')
-                      }
-                    ></i>{' '}
-                    Crear Categoría
-                  </a>
-                </Link>
-              </li>
-
-              <li className='items-center'>
-                <Link href='/admin/create_supplier' as='/admin/create_supplier'>
-                  <a
-                    href='#pablo'
-                    className={
-                      'text-xs uppercase py-3 font-bold block ' +
-                      (router.pathname.indexOf('/admin/create_supplier') !== -1
-                        ? 'text-lightBlue-500 hover:text-lightBlue-600'
-                        : 'text-blueGray-700 hover:text-blueGray-500')
-                    }
-                  >
-                    <i
-                      className={
-                        'fas fa-tools mr-2 text-sm ' +
-                        (router.pathname.indexOf('/admin/create_supplier') !==
-                        -1
-                          ? 'opacity-75'
-                          : 'text-blueGray-300')
-                      }
-                    ></i>{' '}
-                    Crear proveedor
-                  </a>
-                </Link>
-              </li>
-
-              <li className='items-center'>
-                <Link href='/admin/create_client'>
-                  <a
-                    href='#pablo'
-                    className={
-                      'text-xs uppercase py-3 font-bold block ' +
-                      (router.pathname.indexOf('/admin/create_supplier') !== -1
-                        ? 'text-lightBlue-500 hover:text-lightBlue-600'
-                        : 'text-blueGray-700 hover:text-blueGray-500')
-                    }
-                  >
-                    <i
-                      className={
-                        'fas fa-tools mr-2 text-sm ' +
-                        (router.pathname.indexOf('/admin/create_supplier') !==
-                        -1
-                          ? 'opacity-75'
-                          : 'text-blueGray-300')
-                      }
-                    ></i>{' '}
-                    Crear cliente
-                  </a>
-                </Link>
-              </li>
-              <li className='items-center'>
-                <Link href='/admin/create_sale'>
-                  <a
-                  id='test-sales'
-                    href='#pablo'
-                    className={
-                      'text-xs uppercase py-3 font-bold block ' +
-                      (router.pathname.indexOf('/admin/create_sale') !== -1
-                        ? 'text-lightBlue-500 hover:text-lightBlue-600'
-                        : 'text-blueGray-700 hover:text-blueGray-500')
-                    }
-                  >
-                    <i
-                      className={
-                        'fas fa-tools mr-2 text-sm ' +
-                        (router.pathname.indexOf('/admin/create_sale') !== -1
-                          ? 'opacity-75'
-                          : 'text-blueGray-300')
-                      }
-                    ></i>{' '}
-                    Crear Venta
-                  </a>
-                </Link>
-              </li>
-              <li className='items-center'>
+              {/*  <li className='items-center'>
                 <Link href='/admin/tables'>
                   <a
-                    href='#pablo'
+                   
                     className={
                       'text-xs uppercase py-3 font-bold block ' +
                       (router.pathname.indexOf('/admin/tables') !== -1
@@ -280,14 +140,95 @@ export default function Sidebar() {
                     Tables
                   </a>
                 </Link>
-              </li>
+              </li> */}
             </ul>
 
             {/* Divider */}
             <hr className='my-4 md:min-w-full' />
             {/* Heading */}
             <h6 className='md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline'>
-              Consultar
+              Administrar Inventario
+            </h6>
+            {/* Navigation */}
+
+            <ul className='md:flex-col md:min-w-full flex flex-col list-none'>
+              <li className='items-center'>
+                <Link href='/admin/products'>
+                  <a
+                    className={
+                      'text-xs uppercase py-3 font-bold block ' +
+                      (router.pathname.indexOf('/admin/tables') !== -1
+                        ? 'text-lightBlue-500 hover:text-lightBlue-600'
+                        : 'text-blueGray-700 hover:text-blueGray-500')
+                    }
+                  >
+                    <i
+                      className={
+                        'fas fa-table mr-2 text-sm ' +
+                        (router.pathname.indexOf('/admin/tables') !== -1
+                          ? 'opacity-75'
+                          : 'text-blueGray-300')
+                      }
+                    ></i>{' '}
+                    Inventario
+                  </a>
+                </Link>
+              </li>
+
+              {/*   <li className='items-center'>
+                <Link href='/admin/settings'>
+                  <a
+                   
+                    className={
+                      'text-xs uppercase py-3 font-bold block ' +
+                      (router.pathname.indexOf('/admin/settings') !== -1
+                        ? 'text-lightBlue-500 hover:text-lightBlue-600'
+                        : 'text-blueGray-700 hover:text-blueGray-500')
+                    }
+                  >
+                    <i
+                      className={
+                        'fas fa-tools mr-2 text-sm ' +
+                        (router.pathname.indexOf('/admin/settings') !== -1
+                          ? 'opacity-75'
+                          : 'text-blueGray-300')
+                      }
+                    ></i>{' '}
+                    Settings
+                  </a>
+                </Link>
+              </li> */}
+
+              {/*  <li className='items-center'>
+                <Link href='/admin/tables'>
+                  <a
+                   
+                    className={
+                      'text-xs uppercase py-3 font-bold block ' +
+                      (router.pathname.indexOf('/admin/tables') !== -1
+                        ? 'text-lightBlue-500 hover:text-lightBlue-600'
+                        : 'text-blueGray-700 hover:text-blueGray-500')
+                    }
+                  >
+                    <i
+                      className={
+                        'fas fa-table mr-2 text-sm ' +
+                        (router.pathname.indexOf('/admin/tables') !== -1
+                          ? 'opacity-75'
+                          : 'text-blueGray-300')
+                      }
+                    ></i>{' '}
+                    Tables
+                  </a>
+                </Link>
+              </li> */}
+            </ul>
+
+            {/* Divider */}
+            <hr className='my-4 md:min-w-full' />
+            {/* Heading */}
+            <h6 className='md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline'>
+              Administrar Clientes
             </h6>
             {/* Navigation */}
 
@@ -295,7 +236,6 @@ export default function Sidebar() {
               <li className='items-center'>
                 <Link href='/admin/clients'>
                   <a
-                    href='#pablo'
                     className={
                       'text-xs uppercase py-3 font-bold block ' +
                       (router.pathname.indexOf('/admin/tables') !== -1
@@ -315,34 +255,20 @@ export default function Sidebar() {
                   </a>
                 </Link>
               </li>
-              <li className='items-center'>
-                <Link href='/admin/products' as='/admin/products'>
-                  <a
-                    href='#pablo'
-                    className={
-                      'text-xs uppercase py-3 font-bold block ' +
-                      (router.pathname.indexOf('/admin/tables') !== -1
-                        ? 'text-lightBlue-500 hover:text-lightBlue-600'
-                        : 'text-blueGray-700 hover:text-blueGray-500')
-                    }
-                  >
-                    <i
-                      className={
-                        'fas fa-table mr-2 text-sm ' +
-                        (router.pathname.indexOf('/admin/tables') !== -1
-                          ? 'opacity-75'
-                          : 'text-blueGray-300')
-                      }
-                    ></i>{' '}
-                    Productos
-                  </a>
-                </Link>
-              </li>
+            </ul>
+            {/* Divider */}
+            <hr className='my-4 md:min-w-full' />
+            {/* Heading */}
+            <h6 className='md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline'>
+              Administrar Proveedores
+            </h6>
+            {/* Navigation */}
 
+            <ul className='md:flex-col md:min-w-full flex flex-col list-none md:mb-4'>
               <li className='items-center'>
+                {' '}
                 <Link href='/admin/supplier'>
                   <a
-                    href='#pablo'
                     className={
                       'text-xs uppercase py-3 font-bold block ' +
                       (router.pathname.indexOf('/admin/tables') !== -1
@@ -373,10 +299,9 @@ export default function Sidebar() {
             {/* Navigation */}
 
             <ul className='md:flex-col md:min-w-full flex flex-col list-none md:mb-4'>
-              <li className='items-center'>
+              <li>
                 <Link href='/admin/sales'>
                   <a
-                    href='#pablo'
                     className={
                       'text-xs uppercase py-3 font-bold block ' +
                       (router.pathname.indexOf('/admin/tables') !== -1
@@ -396,11 +321,9 @@ export default function Sidebar() {
                   </a>
                 </Link>
               </li>
-
-              <li className='items-center'>
+              <li>
                 <Link href='/admin/debts'>
                   <a
-                    href='#pablo'
                     className={
                       'text-xs uppercase py-3 font-bold block ' +
                       (router.pathname.indexOf('/admin/tables') !== -1
@@ -420,43 +343,19 @@ export default function Sidebar() {
                   </a>
                 </Link>
               </li>
-              <li className='items-center'>
-                <Link href='/admin/create_debt'>
-                  <a
-                    href='#pablo'
-                    className={
-                      'text-xs uppercase py-3 font-bold block ' +
-                      (router.pathname.indexOf('/admin/tables') !== -1
-                        ? 'text-lightBlue-500 hover:text-lightBlue-600'
-                        : 'text-blueGray-700 hover:text-blueGray-500')
-                    }
-                  >
-                    <i
-                      className={
-                        'fas fa-table mr-2 text-sm ' +
-                        (router.pathname.indexOf('/admin/tables') !== -1
-                          ? 'opacity-75'
-                          : 'text-blueGray-300')
-                      }
-                    ></i>{' '}
-                    Abonos
-                  </a>
-                </Link>
-              </li>
             </ul>
 
             {/* Divider */}
             <hr className='my-4 md:min-w-full' />
             {/* Heading */}
             <h6 className='md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline'>
-              Documentation
+              Reportes
             </h6>
             {/* Navigation */}
             <ul className='md:flex-col md:min-w-full flex flex-col list-none md:mb-4'>
               <li className='items-center'>
                 <Link href='/admin/report'>
                   <a
-                    href='#pablo'
                     className={
                       'text-xs uppercase py-3 font-bold block ' +
                       (router.pathname.indexOf('/admin/tables') !== -1

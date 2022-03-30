@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+import SelectSearch from "react-select-search";
+import Button from "@material-tailwind/react/Button";
+import Icon from "@material-tailwind/react/Icon";
 import TableDropdown from "components/Dropdowns/TableDropdown.js";
+import { useRouter } from "next/router";
 export default function ListClients({ color }) {
   const [client, setClient] = useState([]);
-
+  const router = useRouter();
   useEffect(() => {
     getClients();
   }, []);
@@ -18,9 +21,25 @@ export default function ListClients({ color }) {
     console.log("clients", data.client);
     setClient(data.client);
   };
-
+  const crearCliento = () => {
+    //  localStorage.removeItem('glob_token')
+    setTimeout(() => {
+      router.push("/admin/create_client");
+    }, 1000);
+  };
   return (
     <>
+      <link
+        href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        rel="stylesheet"
+      />
+
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+        integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
+        crossOrigin="anonymous"
+      />
       <div
         className={
           "relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded " +
@@ -34,6 +53,29 @@ export default function ListClients({ color }) {
         </div>
         <div className="block w-full overflow-x-auto">
           {/* Projects table */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              margin: "1em",
+            }}
+          >
+            <Button
+              color="green"
+              type="submit"
+              onClick={crearCliento}
+              ripple="light"
+              rounded={false}
+              block={false}
+              iconOnly={false}
+              style={{
+                display: "flex",
+              }}
+            >
+              Agregar cliente
+              <Icon name="add" />
+            </Button>
+          </div>
           <table className="items-center w-full bg-transparent border-collapse">
             <thead>
               <tr>
@@ -69,7 +111,7 @@ export default function ListClients({ color }) {
               </tr>
             </thead>
             <tbody>
-              {client?.map((index) => (
+              {client.map((index) => (
                 <tr>
                   <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4 text-left flex items-center">
                     <span

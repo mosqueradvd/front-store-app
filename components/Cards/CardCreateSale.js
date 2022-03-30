@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react'
-import Button from '@material-tailwind/react/Button'
-import axios from 'axios'
-import { useRouter } from 'next/router'
-import Toggle from './Toggle'
-import Checkbox from '@material-tailwind/react/Checkbox'
-import Modal from '@material-tailwind/react/Modal'
-import ModalHeader from '@material-tailwind/react/ModalHeader'
-import ModalBody from '@material-tailwind/react/ModalBody'
-import ModalFooter from '@material-tailwind/react/ModalFooter'
-import moment from 'moment'
-import TableDropdown from 'components/Dropdowns/TableDropdown.js'
-import Icon from '@material-tailwind/react/Icon'
-import Swal from 'sweetalert2'
-import Radio from '@material-tailwind/react/Radio'
+import React, { useState, useEffect } from "react";
+import Button from "@material-tailwind/react/Button";
+import axios from "axios";
+import { useRouter } from "next/router";
+import Toggle from "./Toggle";
+import Checkbox from "@material-tailwind/react/Checkbox";
+import Modal from "@material-tailwind/react/Modal";
+import ModalHeader from "@material-tailwind/react/ModalHeader";
+import ModalBody from "@material-tailwind/react/ModalBody";
+import ModalFooter from "@material-tailwind/react/ModalFooter";
+import moment from "moment";
+import TableDropdown from "components/Dropdowns/TableDropdown.js";
+import Icon from "@material-tailwind/react/Icon";
+import Swal from "sweetalert2";
+import Radio from "@material-tailwind/react/Radio";
 
 export default function CardCreateSale() {
   let arr = [];
@@ -82,6 +82,23 @@ export default function CardCreateSale() {
   };
 
   const showAlertWarning = () => {
+    Swal.fire({
+      title: "Algo salio mal",
+      text: "No hay stock disponible.",
+      icon: "warning",
+      button: "Aceptar"
+    });
+  };
+  const showAlertSuccess2 = () => {
+    Swal.fire({
+      title: "Recibo generado.",
+      text: "En la ruta de documentos.",
+      icon: "success",
+      button: "Aceptar"
+    });
+  };
+
+  const showAlertWarning2 = () => {
     Swal.fire({
       title: "Algo salio mal",
       text: "No hay stock disponible.",
@@ -217,6 +234,44 @@ export default function CardCreateSale() {
         //router.push('/admin/sales')
       })
       .catch(e => console.error(e));
+  };
+
+  const generate_report_sale = async e => {
+    e.preventDefault();
+    await axios
+      .get("http://localhost:4000/api/report/get-report/receipt", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("glob_token")}`
+        }
+      })
+      .then(async response => {
+        console.log("data", response);
+        await showAlertSuccess2();
+      })
+      .catch(async e => {
+        //console.error(e)
+        await showAlertWarning2();
+      });
+  };
+
+  const generate_report_debt = async e => {
+    e.preventDefault();
+    await axios
+      .get("http://localhost:4000/api/report/get-report/receipt-debt", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("glob_token")}`
+        }
+      })
+      .then(async response => {
+        console.log("data", response);
+        await showAlertSuccess2();
+      })
+      .catch(async e => {
+        //console.error(e)
+        await showAlertWarning2();
+      });
   };
 
   const create_sale = async e => {
@@ -583,6 +638,27 @@ export default function CardCreateSale() {
             >
               Crear Venta
             </Button>
+            <ModalFooter>
+              {status === 1 ? (
+                <Button
+                  color="green"
+                  type="submit"
+                  onClick={generate_report_sale}
+                  ripple="light"
+                >
+                  Generar recibo
+                </Button>
+              ) : (
+                <Button
+                  color="red"
+                  type="submit"
+                  onClick={generate_report_debt}
+                  ripple="light"
+                >
+                  Generar recibo
+                </Button>
+              )}
+            </ModalFooter>
           </form>
           <form>
             <Modal
@@ -613,7 +689,7 @@ export default function CardCreateSale() {
                         <option>Seleccione</option>
                         {prods?.map((i, idx) => (
                           <option key={idx} value={i.id}>
-                            {i.name}
+                            {i.name} - ${i.unit_price}
                           </option>
                         ))}
                       </select>

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import TableDropdown from "components/Dropdowns/TableDropdown.js";
-
+import { useRouter } from "next/router";
+import Swal from "sweetalert2";
+import Button from "@material-tailwind/react/Button";
+import Icon from "@material-tailwind/react/Icon";
 export default function ListDebts({ color }) {
   const [debts, setDebts] = useState([]);
-
+  const router = useRouter();
   let dataSet = [];
   useEffect(() => {
     getDebts();
@@ -34,9 +37,25 @@ export default function ListDebts({ color }) {
 
     setDebts(dataSet);
   };
-
+  const CuentasPorCobrar = () => {
+    //  localStorage.removeItem('glob_token')
+    setTimeout(() => {
+      router.push("/admin/create_debt");
+    }, 1000);
+  };
   return (
     <>
+      <link
+        href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        rel="stylesheet"
+      />
+
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+        integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
+        crossOrigin="anonymous"
+      />
       <div
         className={
           "relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded " +
@@ -50,6 +69,29 @@ export default function ListDebts({ color }) {
         </div>
         <div className="block w-full overflow-x-auto">
           {/* Projects table */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              margin: "1em",
+            }}
+          >
+            <Button
+              color="green"
+              type="submit"
+              onClick={CuentasPorCobrar}
+              ripple="light"
+              rounded={false}
+              block={false}
+              iconOnly={false}
+              style={{
+                display: "flex",
+              }}
+            >
+              Abonar
+              <Icon name="add" />
+            </Button>
+          </div>
           <table className="items-center w-full bg-transparent border-collapse">
             <thead>
               <tr>

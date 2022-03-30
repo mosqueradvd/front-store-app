@@ -2,7 +2,7 @@ import React from 'react'
 import { createPopper } from '@popperjs/core'
 import { useRouter } from 'next/router'
 
-const UserDropdown = () => {
+const ClientDropdown = () => {
   const router = useRouter()
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false)
   const btnDropdownRef = React.createRef()
@@ -17,12 +17,19 @@ const UserDropdown = () => {
   const closeDropdownPopover = () => {
     setDropdownPopoverShow(false)
   }
-  const logout = () => {
-    localStorage.removeItem('glob_token')
+  const crearCliento = () => {
+    //  localStorage.removeItem('glob_token')
     setTimeout(() => {
-      router.push('/auth/login')
+      router.push('/admin/create_client')
     }, 1000)
   }
+  const consultaCliento = () => {
+    //  localStorage.removeItem('glob_token')
+    setTimeout(() => {
+      router.push('/admin/clients')
+    }, 1000)
+  }
+
   return (
     <>
       <a
@@ -34,22 +41,29 @@ const UserDropdown = () => {
           dropdownPopoverShow ? closeDropdownPopover() : openDropdownPopover()
         }}
       >
-        <div className='items-center flex'>
-          <span className='w-12 h-12 text-sm text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full'>
-            <img
-              alt='...'
-              className='w-full rounded-full align-middle border-none shadow-lg'
-              src='/img/logoper.png'
-            />
-          </span>
-        </div>
+        <a
+          href='#pablo'
+          className={
+            'text-xs uppercase py-3 font-bold block ' +
+            (router.pathname.indexOf('/admin/dashboard') !== -1
+              ? 'text-lightBlue-500 hover:text-lightBlue-600'
+              : 'text-blueGray-700 hover:text-blueGray-500')
+          }
+        >
+          <i
+            className={
+              'fas fa-tv mr-2 text-sm ' +
+              (router.pathname.indexOf('/admin/dashboard') !== -1
+                ? 'opacity-75'
+                : 'text-blueGray-300')
+            }
+          ></i>{' '}
+          Clientes
+        </a>
       </a>
       <div
         ref={popoverDropdownRef}
-        className={
-          (dropdownPopoverShow ? 'block ' : 'hidden ') +
-          'bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48'
-        }
+        className={dropdownPopoverShow ? 'block ' : 'hidden '}
       >
         {/*  <a
           href="#pablo"
@@ -79,18 +93,36 @@ const UserDropdown = () => {
           Something else here
         </a> */}
         <div className='h-0 my-2 border border-solid border-blueGray-100' />
-        <a
-          href='#pablo'
-          className={
-            'text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700'
-          }
-          onClick={logout}
-        >
-          Cerrar Sesión
-        </a>
+
+        <ui>
+          <li>
+            <a
+              href='#pablo'
+              className={
+                'text-blue py-2 px-4 font-normal block w-full whitespace-nowrap bg-200 text-white-700 ' +
+                'bg-blue-500 hover:bg-blue-700 text-white font-bold'
+              }
+              onClick={crearCliento}
+            >
+              Crear Clientes
+            </a>
+          </li>
+          <li>
+            <a
+              href='#pablo'
+              className={
+                'text-white py-2 px-4 font-normal block w-full whitespace-nowrap bg-200 text-white-700 ' +
+                'bg-blue-500 hover:bg-blue-700 text-white font-bold'
+              }
+              onClick={consultaCliento}
+            >
+              Consulta Clientes
+            </a>
+          </li>
+        </ui>
       </div>
     </>
   )
 }
 
-export default UserDropdown
+export default ClientDropdown

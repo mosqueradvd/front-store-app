@@ -10,14 +10,25 @@ import ModalBody from "@material-tailwind/react/ModalBody";
 import ModalFooter from "@material-tailwind/react/ModalFooter";
 import Swal from "sweetalert2";
 import axios from "axios";
-
+import { padding } from "tailwindcss-toggle";
+import Radio from "@material-tailwind/react/Radio";
+import { useRouter } from "next/router";
+import Dropdown from "@material-tailwind/react/Dropdown";
+import DropdownItem from "@material-tailwind/react/DropdownItem";
+import DropdownLink from "@material-tailwind/react/DropdownLink";
+import SelectSearch from "react-select-search";
+import { filter, values } from "next-pwa/cache";
+import FilteredProducts from "../components/FilteredProducts";
 const ListProducts = ({ color }) => {
+  const router = useRouter();
+  const [options, setOptions] = useState([]);
   const [prods, setProds] = useState([]);
   const [prod, setProd] = useState([]);
   const [prod_actual, setProdActual] = useState([]);
   const [unit_cost, setUnit_cost] = useState({
     unit_cost: "",
   });
+  const [filterCategory, setFilterCategory] = useState([]);
   const [unit_price, setUnit_price] = useState({
     unit_price: "",
   });
@@ -33,6 +44,9 @@ const ListProducts = ({ color }) => {
   const [quantity, setQuantity] = useState({
     quantity: "",
   });
+
+  const [searchItem, setSearchItem] = useState("");
+
   let arr = [];
   const handleQuantityChange = (e) => {
     let value = e.target.value;
@@ -41,6 +55,18 @@ const ListProducts = ({ color }) => {
       [e.target.name]: value,
     });
   };
+  const handleOption = async (e) => {
+    let value = e.currentTarget.value;
+    console.log(value);
+    setFilterCategory(value);
+
+    setFilterCategory({
+      ...filterCategory,
+      [e.target.name]: value,
+    });
+  };
+  const handleSearch = (e) => setSearchItem(e.target.value);
+
   const handleExpiration_date = (e) => {
     let value = e.target.value;
     setExpiration_date({
@@ -60,22 +86,10 @@ const ListProducts = ({ color }) => {
 
   const handleUnitnameChange = (id, e) => {
     console.log("el id", id);
-    //console.log('ele', e.target.value)
-
-    //product/id
-
-    //objecto = reponse
-    //setProducto(objeto)
-
-    /*producto = {
-      name: objeto.name,
-      valor: obj.name
-    }*/
 
     let myId = prods.filter((prod) => prod.id === id);
     console.log("myId", myId);
 
-    //  defaultValue = producto.name
     let value = e.target.value;
     setUnit_name({
       ...name,
@@ -116,6 +130,20 @@ const ListProducts = ({ color }) => {
       button: "Aceptar",
     });
   };
+
+  const crearCategoria = () => {
+    //  localStorage.removeItem('glob_token')
+    setTimeout(() => {
+      router.push("/admin/create_cat");
+    }, 1000);
+  };
+  const crearProducto = () => {
+    //  localStorage.removeItem('glob_token')
+    setTimeout(() => {
+      router.push("/admin/create_product");
+    }, 1000);
+  };
+
   const get_inventory = async () => {
     const resp = await fetch(
       "http://localhost:4000/api/inventory/get-inventory",
@@ -129,14 +157,23 @@ const ListProducts = ({ color }) => {
 
     for (let index = 0; index < inven.products.length; index++) {
       for (let j = 0; j < inven.products[index].length; j++) {
-        console.log(inven.products[index][j], "i-->", index, "j-->", j);
         const element = inven.products[index][j];
-
         arr.push(element);
       }
     }
     setProds(arr);
     setCategory(inven.category);
+  };
+
+  const get_dataInventory = async () => {
+    const options2 = [];
+
+    category.map((cate) => {
+      options2.push(cate);
+
+      console.log("Options", options);
+    });
+    setOptions(options2);
   };
 
   const update_product = async (e) => {
@@ -191,303 +228,154 @@ const ListProducts = ({ color }) => {
         integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
         crossOrigin="anonymous"
       />
+
       <div
         className={
           "relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded " +
           (color === "light" ? "bg-white" : "bg-blueGray-700 text-white")
         }
       >
-        <div className="rounded-t mb-0 px-4 py-3 border-0">
-          <div className="flex flex-wrap items-center">
-            <div className="relative w-full px-4 max-w-full flex-grow flex-1"></div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            margin: "1em",
+          }}
+        >
+          <div>
+            <input
+              placeholder="Buscar Producto..."
+              type="text"
+              name=""
+              id=""
+              onChange={handleSearch}
+            />
           </div>
-        </div>
-        <div className="block w-full overflow-x-auto">
-          {/* Projects table */}
-          <table className="items-center w-full bg-transparent border-collapse">
-            <thead>
-              <tr>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
-                  }
-                >
-                  Categoria
-                </th>
-
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
-                  }
-                >
-                  Nombre
-                </th>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
-                  }
-                >
-                  Fecha de expiración
-                </th>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
-                  }
-                >
-                  Disponible
-                </th>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
-                  }
-                >
-                  Precio unitario
-                </th>
-
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
-                  }
-                >
-                  Costo Unitario
-                </th>
-                <th>
-                  <Button
-                    color="green"
-                    buttonType="filled"
-                    size="regular"
-                    rounded={false}
-                    block={false}
-                    iconOnly={false}
-                    ripple="light"
-                    onClick={(event) => setShowModal(true)}
-                  >
-                    <Icon name="edit" size="sm" />
-                  </Button>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {category.map((cate) => {
-                return (
-                  <>
-                    <tr>
-                      <p className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4">
-                        {cate.name}
-                      </p>
-                    </tr>
-                    {prods.map((prod) => (
-                      <>
-                        {cate.id === prod.id_category && category.length > 0 ? (
-                          <tr>
-                            <th className="border-t-1 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
-                              <img
-                                src={prod.image}
-                                className="bg-white rounded-md border"
-                                alt="..."
-                                width="150"
-                                height="100"
-                              />
-                            </th>
-
-                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4">
-                              {prod.name}
-                            </td>
-
-                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4">
-                              {moment(prod.expiration_date).format(
-                                "DD-MMM-YYYY"
-                              )}
-                            </td>
-                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4">
-                              {prod.stock}
-                            </td>
-                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4">
-                              {prod.unit_price}
-                            </td>
-                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-m whitespace-nowrap p-4">
-                              {prod.unit_cost}
-                            </td>
-                          </tr>
-                        ) : (
-                          console.log("jeje")
-                        )}
-                      </>
-                    ))}
-                  </>
-                );
-              })}
-            </tbody>
-          </table>
-          <form>
-            <Modal
-              size="large"
-              active={showModal}
-              toggler={() => setShowModal(false)}
+          <div>
+            {/* <form action=""> */}
+            <select
+              name="category"
+              id="category"
+              type="select"
+              onChange={handleOption}
             >
-              <ModalHeader toggler={() => setShowModal(false)}>
-                Editar producto
-              </ModalHeader>
-              <ModalBody>
-                <div className="flex flex-wrap">
-                  <div className="w-full lg:w-px-4">
-                    <div className="relative w-full mb-3">
-                      <label
-                        className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                        htmlFor="prods"
-                      >
-                        Selecciona el producto
-                      </label>
-                      <select
-                        id="prods"
-                        name="prods"
-                        type="prods"
-                        className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                        onChange={handleProductChange}
-                      >
-                        <option>Seleccione</option>
-                        {prods?.map((i, idx) => (
-                          <option key={idx} value={i.id}>
-                            {i.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                  {prods?.map((index) => {
-                    return (
-                      <>
-                        {index.id === parseInt(prod.prods) ? (
-                          <>
-                            <div className="relative w-full mb-3">
-                              <label
-                                className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                htmlFor="quantity_sale"
-                              >
-                                Nombre
-                              </label>
-                              <input
-                                id="name"
-                                name="name"
-                                defaultValue={index.name}
-                                type="text"
-                                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-40 ease-linear transition-all duration-150"
-                                onChange={handleUnitnameChange}
-                                onClick={(e) => runOnCHange(index.id)}
-                              />
-                            </div>
+              <option value="">Todas las categorias</option>
+              {category?.map((i, id) => (
+                <option value={i.id} key={id}>
+                  {i.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-                            {/*  <option value=''>{prods.quantity}</option> */}
-                            <div className="relative w-full mb-3">
-                              <label
-                                className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                htmlFor="quantity_sale"
-                              >
-                                Cantidad
-                              </label>
-                              <input
-                                id="quantity"
-                                name="quantity"
-                                defaultValue={index.quantity}
-                                type="text"
-                                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-40 ease-linear transition-all duration-150"
-                                onChange={handleQuantityChange}
-                              />
-                            </div>
-                            <div className="relative w-full mb-3">
-                              <label
-                                className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                htmlFor="quantity_sale"
-                              >
-                                Costo unitario
-                              </label>
-                              <input
-                                id="unit_cost"
-                                name="unit_cost"
-                                defaultValue={index.unit_cost}
-                                type="text"
-                                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-40 ease-linear transition-all duration-150"
-                                onChange={handleUnitcostChange}
-                              />
-                            </div>
-                            <div className="relative w-full mb-3">
-                              <label
-                                className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                htmlFor="quantity_sale"
-                              >
-                                Precio unitario
-                              </label>
-                              <input
-                                id="unit_price"
-                                name="unit_price"
-                                defaultValue={index.unit_price}
-                                type="text"
-                                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-40 ease-linear transition-all duration-150"
-                                onChange={handleUnitPriceChange}
-                              />
-                            </div>
-                            {/*  <div className='w-full lg:w-6/12 px-4'>
-                              <div className='relative w-full mb-3'>
-                                <label
-                                  className='block uppercase text-blueGray-600 text-xs font-bold mb-2'
-                                  htmlFor='expiration_date'
-                                >
-                                  Fecha de Vencimiento
-                                </label>
-                                <input
-                                  id='expiration_date'
-                                  type='date'
-                                  name='expiration_date'
-                                  defaultValue={index.expiration_date}
-                                  className='border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150'
-                                  onChange={handleExpiration_date}
-                                />
-                              </div>
-                            </div> */}
-                          </>
-                        ) : (
-                          console.log("mal")
-                        )}
-                      </>
-                    );
-                  })}
+          <Button
+            color="green"
+            type="submit"
+            onClick={crearProducto}
+            ripple="light"
+            rounded={false}
+            block={false}
+            iconOnly={false}
+            style={{
+              display: "flex",
+            }}
+          >
+            Agregar producto
+            <Icon name="add" />
+          </Button>
+
+          <Button
+            color="green"
+            type="submit"
+            onClick={crearCategoria}
+            ripple="light"
+            rounded={false}
+            block={false}
+            iconOnly={false}
+            style={{
+              display: "flex",
+            }}
+          >
+            Crear Categoria
+            <Icon name="add" />
+          </Button>
+        </div>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(6, 1fr)",
+          }}
+        >
+          {filterCategory.category == "" || filterCategory.category == null ? (
+            prods.map((product, index) => (
+              <div
+                style={{
+                  borderRadius: "6px",
+                  boxShadow: "0px 2px 4px rgba(0,0,0,0.4)",
+                  padding: "1em",
+                  margin: "1em",
+                }}
+                key={index}
+              >
+                <div>
+                  <img src={product.image} height="40px" />
                 </div>
-              </ModalBody>
-              <ModalFooter>
-                <Button
-                  color="red"
-                  type="submit"
-                  onClick={update_product}
-                  ripple="light"
-                >
-                  Actualizar
-                </Button>
-              </ModalFooter>
-            </Modal>
-          </form>
+                <div className="content">
+                  <p>{product.name}</p>
+                  <p>{product.stock} Disponibles</p>
+                  <p>{product.unit_price} $</p>
+                </div>
+              </div>
+            ))
+          ) : (
+            <FilteredProducts products={prods} filter={filterCategory} />
+          )}
         </div>
       </div>
     </>
   );
 };
+
+/**
+ * 
+ *   <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(6, 1fr)',
+          }}
+        >
+          {
+            prods?.filter((prod => filterCategory.category == prod.id_category)).map(
+              (filtered, index) => (
+                <div
+                  style={{
+                    borderRadius: '6px',
+
+                    boxShadow: '0px 2px 4px rgba(0,0,0,0.4)',
+                    padding: '1em',
+                    margin: '1em',
+                  }}
+                  key={index}
+                >
+                  <div>
+                    <img
+                      src={filtered.image}
+                      height='40px'
+                    />
+                  </div>
+                  <div className='content'>
+                    <p>{filtered.name}</p>
+                    <p>{filtered.stock} Disponibles</p>
+                    <p>{filtered.unit_price} $</p>
+                  </div>
+                </div>
+              )
+            )
+          }
+
+        </div>
+ */
 
 /**
  * return (
